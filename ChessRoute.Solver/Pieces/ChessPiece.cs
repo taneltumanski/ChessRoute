@@ -10,27 +10,36 @@ namespace ChessRoute.Solver.Pieces
 		private readonly ChessPiecePosition _position;
 		public ChessPiecePosition Position { get { return _position; } }
 
-		public abstract IEnumerable<ChessPiecePosition> PieceMovePositions { get; }
-
 		public ChessPiece() : this(new ChessPiecePosition(0,0)) {}
 		public ChessPiece(ChessPiecePosition position)
 		{
 			this._position = position;
 		}
 
-		public ChessPiece Move(ChessPiecePosition newPosition)
+		public ChessPiece Move(ChessPiecePosition newPosition, ChessBoard board)
 		{
 			if (this.Position == newPosition) {
 				return this;
 			}
 
-			if (!this.PieceMovePositions.Contains(newPosition)) {
+			if (!this.GetAvailableMovePositions(board).Contains(newPosition)) {
 				throw new ArgumentException("Cannot move the piece");
 			}
 
-			return MoveInternal(newPosition);
+			return CreateSubclassInstance(newPosition);
 		}
 
-		protected abstract ChessPiece MoveInternal(ChessPiecePosition newPosition);
+		public IEnumerable<ChessPiecePosition> GetAvailableMovePositions(ChessBoard board)
+		{
+			return this.GetMovePositions(board).Where(pos => IsPositionAvailable(pos, board));
+		}
+
+		protected bool IsPositionAvailable(ChessPiecePosition pos, ChessBoard board)
+		{
+			return board.IsPositionOnBoard(pos) && board.IsFreePosition(pos);
+		}
+
+		protected abstract IEnumerable<ChessPiecePosition> GetMovePositions(ChessBoard board);
+		protected abstract ChessPiece CreateSubclassInstance(ChessPiecePosition newPosition);
 	}
 }

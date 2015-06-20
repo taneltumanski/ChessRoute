@@ -54,8 +54,14 @@
     <Compile Include="ChessSolverResult.cs" />
     <Compile Include="ChessMovementSolverParameters.cs" />
     <Compile Include="DefaultChessMovementSolverParameters.cs" />
+    <Compile Include="Pieces\Bishop.cs" />
     <Compile Include="Pieces\ChessPiece.cs" />
+    <Compile Include="Pieces\InfiniteMovingChessPiece.cs" />
+    <Compile Include="Pieces\King.cs" />
     <Compile Include="Pieces\Knight.cs" />
+    <Compile Include="Pieces\Pawn.cs" />
+    <Compile Include="Pieces\Queen.cs" />
+    <Compile Include="Pieces\Rook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

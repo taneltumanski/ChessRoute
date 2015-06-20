@@ -14,17 +14,11 @@ namespace ChessRoute.Solver
 
 		private readonly ImmutableDictionary<int, ImmutableDictionary<int, bool>> _positionData;
 
-		public IEnumerable<ChessPiecePosition> FreePositions {
-			get {
-				foreach (var row in _positionData) {
-					foreach (var column in _positionData[row.Key]) {
-						if (_positionData[row.Key][column.Key]) {
-							yield return new ChessPiecePosition(row.Key, column.Key);
-						}
-					}
-				}
-			}
-		}
+		private readonly int _width;
+		private readonly int _height;
+
+		public int Width { get { return _width; } }
+		public int Height { get { return _height; } }
 
 		public ChessBoard(IEnumerable<ChessPiecePosition> takenPositions) : this(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT, takenPositions) { }
 		public ChessBoard(int width, int height, IEnumerable<ChessPiecePosition> takenPositions)
@@ -41,6 +35,8 @@ namespace ChessRoute.Solver
 				throw new ArgumentNullException("takenPositions");
 			}
 
+			this._width = width;
+			this._height = height;
 			this._positionData = GetAvailablePositions(width, height, takenPositions.ToImmutableList());
 		}
 

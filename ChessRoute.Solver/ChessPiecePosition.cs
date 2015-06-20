@@ -95,7 +95,7 @@ namespace ChessRoute.Solver
 
 			var sb = new StringBuilder();
 
-			//TODO CORRECT METHOD PLZ
+			//TODO CORRECT METHOD
 			sb.Append((char)('A' + row));
 
 			return sb.ToString();
