@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F614B311-2DF9-4D5D-9054-18BB80DBABB1}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{938E11DE-E776-4530-85C4-08A9A0C00CE5}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChessRoute</RootNamespace>
-    <AssemblyName>ChessRoute</AssemblyName>
+    <RootNamespace>ChessRoute.Solver</RootNamespace>
+    <AssemblyName>ChessRoute.Solver</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,7 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MoreLinq">
+      <HintPath>..\packages\morelinq.1.1.1\lib\net35\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="ReadOnlyCollectionsInterfaces">
+      <HintPath>..\packages\ReadOnlyCollectionInterfaces.1.0.0\lib\NET40-client\ReadOnlyCollectionsInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable.Net40">
+      <HintPath>..\packages\System.Collections.Immutable.Net40.1.0.30.17\lib\net40\System.Collections.Immutable.Net40.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,19 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultFileParser.cs" />
-    <Compile Include="FileParserFactory.cs" />
-    <Compile Include="FileResultWriter.cs" />
-    <Compile Include="IFileParser.cs" />
-    <Compile Include="IResultWriter.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ChessBoard.cs" />
+    <Compile Include="ChessMovementSolver.cs" />
+    <Compile Include="ChessPiecePosition.cs" />
+    <Compile Include="ChessSolverResult.cs" />
+    <Compile Include="ChessMovementSolverParameters.cs" />
+    <Compile Include="DefaultChessMovementSolverParameters.cs" />
+    <Compile Include="Pieces\ChessPiece.cs" />
+    <Compile Include="Pieces\Knight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ChessRoute.Solver\ChessRoute.Solver.csproj">
-      <Project>{938e11de-e776-4530-85c4-08a9a0c00ce5}</Project>
-      <Name>ChessRoute.Solver</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
