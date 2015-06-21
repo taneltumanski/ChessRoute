@@ -17,7 +17,7 @@ namespace ChessRoute.Solver.Pieces
 
 		protected override IEnumerable<ChessPiecePosition> GetMovePositions(ChessBoard board)
 		{
-			yield return new ChessPiecePosition(this.Position.Row + 1, this.Position.Column);
+			yield return new ChessPiecePosition(this.Position.Row - 1, this.Position.Column);
 		}
 	}
 }
