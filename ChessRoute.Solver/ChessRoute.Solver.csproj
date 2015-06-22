@@ -50,10 +50,12 @@
   <ItemGroup>
     <Compile Include="ChessBoard.cs" />
     <Compile Include="ChessMovementSolver.cs" />
+    <Compile Include="ChessPieceFactory.cs" />
     <Compile Include="ChessPiecePosition.cs" />
     <Compile Include="ChessSolverResult.cs" />
     <Compile Include="ChessMovementSolverParameters.cs" />
-    <Compile Include="DefaultChessMovementSolverParameters.cs" />
+    <Compile Include="IChessMovementSolver.cs" />
+    <Compile Include="IMinimalPathFinder.cs" />
     <Compile Include="Pieces\Bishop.cs" />
     <Compile Include="Pieces\ChessPiece.cs" />
     <Compile Include="Pieces\InfiniteMovingChessPiece.cs" />
@@ -63,6 +65,8 @@
     <Compile Include="Pieces\Queen.cs" />
     <Compile Include="Pieces\Rook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Solvers\AStarPathFinder.cs" />
+    <Compile Include="Solvers\RecursivePathFinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -9,8 +9,8 @@ namespace ChessRoute.Solver
 {
     public class ChessBoard
     {
-		internal static readonly int DEFAULT_BOARD_WIDTH = 8;
-		internal static readonly int DEFAULT_BOARD_HEIGHT = 8;
+		private static readonly int DEFAULT_BOARD_WIDTH = 8;
+		private static readonly int DEFAULT_BOARD_HEIGHT = 8;
 
 		private readonly ImmutableDictionary<int, ImmutableDictionary<int, bool>> _positionData;
 

@@ -26,6 +26,12 @@ namespace ChessRoute.Solver.Pieces
 				throw new ArgumentException("Cannot move the piece");
 			}
 
+			// We could create the instance with Activatior.CreateInstance but it is much slower when using the parametrized version
+			return CreateSubclassInstance(newPosition);
+		}
+
+		public ChessPiece ForceMove(ChessPiecePosition newPosition)
+		{
 			return CreateSubclassInstance(newPosition);
 		}
 

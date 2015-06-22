@@ -1,4 +1,5 @@
 ﻿using ChessRoute.Solver;
+using ChessRoute.Solver.Solvers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,16 +25,28 @@ namespace ChessRoute
 			var inputFile = args[0];
 			var outputFile = args[1];
 
-			var parserFactory = new FileParserFactory();
-			var parser = parserFactory.CreateFileParser(inputFile);
+			var parser = new FileParser();
 
-			var parameters = parser.Parse(inputFile);
-			var solver = new ChessMovementSolver(parameters);
-			var result = solver.Solve();
+			var inputParameters = parser.Parse(inputFile);
+			var chessSolverParameters = inputParameters.ToSolverParameters();
+			var solver = new ChessMovementSolver(new AStarPathFinder());
+			var result = solver.Solve(chessSolverParameters);
 
 			var resultOutputWriter = new FileResultWriter(outputFile);
 
 			resultOutputWriter.Write(result);
+
+			Console.WriteLine("Time = " + result.TimeTaken);
+			Console.WriteLine("Piece = " + result.ChessPiece.GetType().Name);
+			Console.WriteLine("Board = " + result.ChessBoard.Width + "x" + result.ChessBoard.Height);
+			Console.WriteLine("Start pos = " + result.StartPosition);
+			Console.WriteLine("End pos = " + result.EndPosition);
+			Console.WriteLine("Path found = " + result.HasSolution);
+
+			if (result.HasSolution) {
+				Console.WriteLine("Solution count = " + result.MinimalPaths.Count());
+				Console.WriteLine("Step count = " + result.MinimalPaths.First().Count);
+			}
 
 			return 0;
 		}

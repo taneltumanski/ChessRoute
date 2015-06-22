@@ -17,14 +17,12 @@ namespace ChessRoute.Solver.Pieces
 
 		protected abstract IEnumerable<Func<ChessPiecePosition, ChessPiecePosition>> GetMoveFunctions();
 
-		private IEnumerable<ChessPiecePosition> PositionIterator(ChessPiecePosition startPos, Func<ChessPiecePosition, ChessPiecePosition> nextPositionFunc)
+		private IEnumerable<ChessPiecePosition> PositionIterator(ChessPiecePosition position, Func<ChessPiecePosition, ChessPiecePosition> nextPositionFunc)
 		{
-			var currentPos = startPos;
-
 			while (true) {
-				currentPos = nextPositionFunc(currentPos);
+				position = nextPositionFunc(position);
 
-				yield return currentPos;
+				yield return position;
 			}
 		}
 	}

@@ -13,12 +13,12 @@ namespace ChessRoute.Solver
 		public ChessPiecePosition StartPosition { get; private set; }
 		public ChessPiecePosition EndPosition { get; private set; }
 		public ChessPiece ChessPiece { get; private set; }
+		public ChessBoard ChessBoard { get; private set; }
 		public TimeSpan TimeTaken { get; private set; }
 
-		public bool HasPath { get { return StartPosition == EndPosition || MinimalPaths.Any(); } }
+		public bool HasSolution { get { return StartPosition == EndPosition || MinimalPaths.Any(); } }
 
-		public ChessSolverResult(ChessPiecePosition startPos, ChessPiecePosition endPos, ChessPiece piece, TimeSpan timeTaken) : this(startPos, endPos, piece, new List<IList<ChessPiecePosition>>(), timeTaken) { }
-		public ChessSolverResult(ChessPiecePosition startPos, ChessPiecePosition endPos, ChessPiece piece, IEnumerable<IList<ChessPiecePosition>> minimalPaths, TimeSpan timeTaken)
+		public ChessSolverResult(ChessPiecePosition startPos, ChessPiecePosition endPos, ChessPiece piece, ChessBoard board, IEnumerable<IList<ChessPiecePosition>> minimalPaths, TimeSpan timeTaken)
 		{
 			if (minimalPaths == null) {
 				throw new ArgumentNullException("minimalPaths");
@@ -28,6 +28,11 @@ namespace ChessRoute.Solver
 				throw new ArgumentNullException("piece");
 			}
 
+			if (board == null) {
+				throw new ArgumentNullException("board");
+			}
+
+			this.ChessBoard = board;
 			this.TimeTaken = timeTaken;
 			this.ChessPiece = piece;
 			this.StartPosition = startPos;
