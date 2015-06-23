@@ -12,13 +12,16 @@ namespace ChessRoute.Solver
 		private static readonly int DEFAULT_BOARD_WIDTH = 8;
 		private static readonly int DEFAULT_BOARD_HEIGHT = 8;
 
-		private readonly ImmutableDictionary<int, ImmutableDictionary<int, bool>> _positionData;
+		private readonly bool[][] _positionData;
 
 		private readonly int _width;
 		private readonly int _height;
 
 		public int Width { get { return _width; } }
 		public int Height { get { return _height; } }
+
+		private readonly ReadOnlyCollection<ChessPiecePosition> _takenPositions;
+		public IEnumerable<ChessPiecePosition> TakenPositions { get { return _takenPositions; } }
 
 		public ChessBoard(IEnumerable<ChessPiecePosition> takenPositions) : this(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT, takenPositions) { }
 		public ChessBoard(int width, int height, IEnumerable<ChessPiecePosition> takenPositions)
@@ -35,19 +38,22 @@ namespace ChessRoute.Solver
 				throw new ArgumentNullException("takenPositions");
 			}
 
+			var takenPositionsList = takenPositions.ToImmutableList();
+			
 			this._width = width;
 			this._height = height;
-			this._positionData = GetAvailablePositions(width, height, takenPositions.ToImmutableList());
+			this._positionData = GetAvailablePositions(width, height, takenPositionsList);
+			this._takenPositions = new ReadOnlyCollection<ChessPiecePosition>(takenPositionsList);
 		}
 
-		private ImmutableDictionary<int, ImmutableDictionary<int, bool>> GetAvailablePositions(int width, int height, IEnumerable<ChessPiecePosition> takenPositions)
+		private bool[][] GetAvailablePositions(int width, int height, IEnumerable<ChessPiecePosition> takenPositions)
 		{
-			var rowBuilder = ImmutableDictionary.CreateBuilder<int, ImmutableDictionary<int, bool>>();
+			var rowBuilder = new bool[height][];
 
-			for (int row = 0; row < height; row++) {
-				var columnBuilder = ImmutableDictionary.CreateBuilder<int, bool>();
+			for (int row = 0; row < rowBuilder.Length; row++) {
+				var columnBuilder = new bool[width];
 
-				for (int column = 0; column < width; column++) {
+				for (int column = 0; column < columnBuilder.Length; column++) {
 					bool isFreePosition = true;
 
 					if (takenPositions.Any(pos => pos.Column == column && pos.Row == row)) {
@@ -57,10 +63,10 @@ namespace ChessRoute.Solver
 					columnBuilder[column] = isFreePosition;
 				}
 
-				rowBuilder[row] = columnBuilder.ToImmutable();
+				rowBuilder[row] = columnBuilder;
 			}
 
-			return rowBuilder.ToImmutable();
+			return rowBuilder;
 		}
 
 		public bool IsFreePosition(ChessPiecePosition pos)
@@ -74,7 +80,11 @@ namespace ChessRoute.Solver
 
 		public bool IsPositionOnBoard(ChessPiecePosition pos)
 		{
-			return _positionData.ContainsKey(pos.Row) && _positionData[pos.Row].ContainsKey(pos.Column);
+			if (pos.Row < 0 || pos.Column < 0) {
+				return false;
+			}
+
+			return _positionData.Length > pos.Row && _positionData[pos.Row].Length > pos.Column;
 		}
     }
 }
