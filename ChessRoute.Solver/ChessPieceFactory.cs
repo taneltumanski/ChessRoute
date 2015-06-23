@@ -27,7 +27,7 @@ namespace ChessRoute.Solver
 		{
 			ChessPieceOption pieceOption;
 
-			if (Enum.TryParse(name, out pieceOption)) {
+			if (Enum.TryParse(name, true, out pieceOption)) {
 				return CreateChessPiece(pieceOption);
 			}
 

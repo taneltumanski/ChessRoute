@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using MoreLinq;
 
 namespace ChessRoute.Solver
 {
@@ -37,7 +38,7 @@ namespace ChessRoute.Solver
 			this.ChessPiece = piece;
 			this.StartPosition = startPos;
 			this.EndPosition = endPos;
-			this.MinimalPaths = new ReadOnlyCollection<IList<ChessPiecePosition>>(minimalPaths.ToList());
+			this.MinimalPaths = new ReadOnlyCollection<ReadOnlyCollection<ChessPiecePosition>>(minimalPaths.Select(path => new ReadOnlyCollection<ChessPiecePosition>(path)).ToList());
 		}
 	}
 }

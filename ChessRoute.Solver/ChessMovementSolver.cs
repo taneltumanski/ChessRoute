@@ -77,6 +77,12 @@ namespace ChessRoute.Solver
 			// If the result is not found then create
 			var returnResult = bestResults == null ? new List<IList<ChessPiecePosition>>() : bestResults.ToList();
 
+			// Remove the first position if it is the start position
+			returnResult = returnResult
+								.Select(path => path.Any() && path.First() == startPosition ? path.Skip(1).ToList() : path.ToList())
+								.Cast<IList<ChessPiecePosition>>()
+								.ToList();
+
 			stopWatch.Stop();
 
 			return new ChessSolverResult(startPosition, endPosition, chessPiece, board, returnResult, stopWatch.Elapsed);
