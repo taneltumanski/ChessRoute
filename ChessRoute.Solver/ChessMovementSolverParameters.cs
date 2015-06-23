@@ -22,12 +22,12 @@ namespace ChessRoute.Solver
 				throw new ArgumentNullException("piece");
 			}
 
-			if (width < 0) {
-				throw new ArgumentException("Board width cannot be < 0");
+			if (width <= 0) {
+				throw new ArgumentException("Board width cannot be <= 0");
 			}
 
-			if (height < 0) {
-				throw new ArgumentException("Board height cannot be < 0");
+			if (height <= 0) {
+				throw new ArgumentException("Board height cannot be <= 0");
 			}
 
 			if (takenPositions == null) {
