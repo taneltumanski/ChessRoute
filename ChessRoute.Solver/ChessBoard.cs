@@ -23,12 +23,12 @@ namespace ChessRoute.Solver
 		public ChessBoard(IEnumerable<ChessPiecePosition> takenPositions) : this(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT, takenPositions) { }
 		public ChessBoard(int width, int height, IEnumerable<ChessPiecePosition> takenPositions)
 		{
-			if (width < 0) {
-				throw new ArgumentException("Board width cannot be < 0");
+			if (width <= 0) {
+				throw new ArgumentException("Board width cannot be <= 0");
 			}
 
-			if (height < 0) {
-				throw new ArgumentException("Board height cannot be < 0");
+			if (height <= 0) {
+				throw new ArgumentException("Board height cannot be <= 0");
 			}
 
 			if (takenPositions == null) {
