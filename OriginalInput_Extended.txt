@@ -1,0 +1,14 @@
+A1
+H8
+B2, D7, G6
+Knight
+8
+8
+
+The lines specify:
+	Start position,
+	End position,
+	Taken positions,
+	Chess piece,
+	Board width,
+	Board height
