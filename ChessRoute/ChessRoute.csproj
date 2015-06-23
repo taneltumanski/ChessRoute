@@ -38,20 +38,17 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileParser.cs" />
-    <Compile Include="FileResultWriter.cs" />
+    <Compile Include="Output\FileResultWriter.cs" />
     <Compile Include="Input\IInputParser.cs" />
     <Compile Include="Input\InputParameters.cs" />
     <Compile Include="Input\JSONInputParser.cs" />
     <Compile Include="Input\OriginalInputParser.cs" />
-    <Compile Include="IResultWriter.cs" />
+    <Compile Include="Output\IResultWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

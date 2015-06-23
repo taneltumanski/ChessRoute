@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace ChessRoute
+namespace ChessRoute.Output
 {
 	public class FileResultWriter : IResultWriter
 	{
@@ -22,8 +22,6 @@ namespace ChessRoute
 
 		public void Write(ChessSolverResult result)
 		{
-			var path = this._filePath;
-
 			var sb = new StringBuilder();
 
 			foreach (var resultPath in result.MinimalPaths) {
@@ -31,7 +29,7 @@ namespace ChessRoute
 				sb.AppendLine(string.Join(", ", resultPath.Select(pos => pos.ToString())));
 			}
 
-			File.WriteAllText(path, sb.ToString());
+			File.WriteAllText(this._filePath, sb.ToString());
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using ChessRoute.Input;
+using ChessRoute.Output;
 using ChessRoute.Solver;
 using ChessRoute.Solver.Solvers;
 using Newtonsoft.Json;
