@@ -19,7 +19,7 @@ namespace ChessRoute
 			if (args.Length < 2) {
 				using (var process = Process.GetCurrentProcess()) {
 					Console.WriteLine("Usage:");
-					Console.WriteLine(string.Format("\t{0} {input file} {output file}", Path.GetFileName(process.MainModule.FileName)));
+					Console.WriteLine(string.Format("\t{0} {{input file}} {{output file}}", Path.GetFileName(process.MainModule.FileName)));
 				}
 
 				return 1;
