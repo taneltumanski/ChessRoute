@@ -10,24 +10,28 @@ namespace ChessRoute.Input
 	{
 		public InputParameters Parse(string data)
 		{
-			var lines = data.Split(new [] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToArray();
+			if (string.IsNullOrWhiteSpace(data)) {
+				throw new ArgumentException("Data is invalid");
+			}
+
+			var lines = data.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
 
 			var startPosString = lines[0];
 			var endPosString = lines[1];
-			var takenPositionsStrings = lines[2].Split(',').Select(x => x.Trim()).ToList();
+			var takenPositionsStrings = lines[2].Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
 			var chessPiece = ChessPieceOption.Knight;
 			var boardWidth = 8;
 			var boardHeight = 8;
 
-			if (lines.Length > 3) {
+			if (lines.Count > 3) {
 				chessPiece = (ChessPieceOption)Enum.Parse(typeof(ChessPieceOption), lines[3], true);
 			}
 
-			if (lines.Length > 4) {
+			if (lines.Count > 4) {
 				boardWidth = int.Parse(lines[4]);
 			}
 
-			if (lines.Length > 5) {
+			if (lines.Count > 5) {
 				boardHeight = int.Parse(lines[5]);
 			}
 
