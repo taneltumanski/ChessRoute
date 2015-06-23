@@ -47,7 +47,10 @@
   <ItemGroup>
     <Compile Include="FileParser.cs" />
     <Compile Include="FileResultWriter.cs" />
-    <Compile Include="InputFileParameters.cs" />
+    <Compile Include="Input\IInputParser.cs" />
+    <Compile Include="Input\InputParameters.cs" />
+    <Compile Include="Input\JSONInputParser.cs" />
+    <Compile Include="Input\OriginalInputParser.cs" />
     <Compile Include="IResultWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +63,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="InputSamples\CustomInput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="InputSamples\OriginalInput.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,8 @@
+﻿{
+	"StartPosition" : "A1",
+	"EndPosition" : "H8",
+	"ChessPiece" : "Knight",
+	"TakenPositions" : ["B2", "D7", "G6"],
+	"BoardWidth" : 8,
+	"BoardHeight" : 8
+}

@@ -1,7 +1,9 @@
-﻿using ChessRoute.Solver;
+﻿using ChessRoute.Input;
+using ChessRoute.Solver;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +12,25 @@ namespace ChessRoute
 {
 	public class FileParser
 	{
-		public InputFileParameters Parse(string filePath)
+		private readonly ReadOnlyCollection<IInputParser> Parsers;
+
+		public FileParser() : this(new List<IInputParser>() { new OriginalInputParser(), new JSONInputParser() }) { }
+		public FileParser(IEnumerable<IInputParser> parsers)
+		{
+			if (parsers == null) {
+				throw new ArgumentNullException("parsers");
+			}
+
+			var parserList = parsers.ToList();
+
+			if (!parserList.Any()) {
+				throw new ArgumentException("No parsers defined");
+			}
+
+			this.Parsers = new ReadOnlyCollection<IInputParser>(parserList);
+		}
+
+		public InputParameters Parse(string filePath)
 		{
 			if (string.IsNullOrWhiteSpace(filePath)) {
 				throw new ArgumentNullException("filePath");
@@ -20,58 +40,19 @@ namespace ChessRoute
 				throw new ArgumentException("File does not exist - " + filePath);
 			}
 
-			var lines = File.ReadAllLines(filePath).Select(x => x.Trim()).ToArray();
+			var text = File.ReadAllText(filePath);
 
-			InputFileParameters parameters = null;
+			if (string.IsNullOrWhiteSpace(text)) {
+				throw new ArgumentException("File data is invalid");
+			}
 
-			try {
-				parameters = ParseDefault(lines);
-			} catch (Exception) { }
-
-			if (parameters == null) {
-				var joinedString = string.Join("", lines);
-
+			foreach (var parser in this.Parsers) {
 				try {
-					parameters = JsonConvert.DeserializeObject<InputFileParameters>(joinedString, new JsonSerializerSettings() { MissingMemberHandling = MissingMemberHandling.Error });
+					return parser.Parse(text);
 				} catch (Exception) { }
 			}
 
-			if (parameters == null) {
-				throw new ArgumentException("Could not parse input file");
-			}
-
-			return parameters;
-		}
-
-		private InputFileParameters ParseDefault(string[] lines)
-		{
-			var startPosString = lines[0];
-			var endPosString = lines[1];
-			var takenPositionsStrings = lines[2].Split(',').Select(x => x.Trim()).ToList();
-			var chessPiece = ChessPieceOption.Knight;
-			var boardWidth = 8;
-			var boardHeight = 8;
-
-			if (lines.Length > 3) {
-				chessPiece = (ChessPieceOption)Enum.Parse(typeof(ChessPieceOption), lines[3], true);
-			}
-
-			if (lines.Length > 4) {
-				boardWidth = int.Parse(lines[4]);
-			}
-
-			if (lines.Length > 5) {
-				boardHeight = int.Parse(lines[5]);
-			}
-
-			return new InputFileParameters() {
-				StartPosition = startPosString,
-				EndPosition = endPosString,
-				TakenPositions = takenPositionsStrings,
-				ChessPiece = chessPiece,
-				BoardWidth = boardWidth,
-				BoardHeight = boardHeight,
-			};
+			throw new ArgumentException("Could not parse input file");
 		}
 	}
 }

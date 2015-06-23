@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ChessRoute
+namespace ChessRoute.Input
 {
-	public class InputFileParameters
+	public class InputParameters
 	{
 		public string StartPosition { get; set; }
 		public string EndPosition { get; set; }
