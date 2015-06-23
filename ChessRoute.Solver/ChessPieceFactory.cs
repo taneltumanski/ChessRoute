@@ -2,23 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace ChessRoute.Solver
 {
 	public class ChessPieceFactory
 	{
-		public ChessPiece CreateChessPiece(string pieceName)
-		{
-			ChessPieceOption option;
-
-			if (Enum.TryParse(pieceName, out option)) {
-				return CreateChessPiece(option);
-			}
-
-			throw new NotSupportedException(pieceName + " is not supported");
-		}
-
 		public ChessPiece CreateChessPiece(ChessPieceOption pieceOption)
 		{
 			switch (pieceOption) {
@@ -31,6 +21,42 @@ namespace ChessRoute.Solver
 			}
 
 			throw new NotSupportedException(string.Format("Piece option {0} invalid", pieceOption));
+		}
+
+		public ChessPiece CreateChessPiece(string name)
+		{
+			ChessPieceOption pieceOption;
+
+			if (Enum.TryParse(name, out pieceOption)) {
+				return CreateChessPiece(pieceOption);
+			}
+
+			var chessPieceType = ChessPieceTypeByName(name);
+
+			if (chessPieceType != null) {
+				return (ChessPiece)Activator.CreateInstance(chessPieceType);
+			}
+
+			throw new NotSupportedException(string.Format("Piece option {0} invalid", pieceOption));
+		}
+
+		private Type ChessPieceTypeByName(string name)
+		{
+			var chessPieceType = typeof(ChessPiece);
+			var chessPieceTypes = AppDomain.CurrentDomain
+												.GetAssemblies()
+												.SelectMany(ass => ass.GetTypes())
+												.Where(type => !type.IsAbstract && type != chessPieceType && type.IsAssignableFrom(chessPieceType));
+
+			var matchingTypes = chessPieceTypes.Where(type => type.Name == name).ToList();
+
+			if (matchingTypes.Count == 1) {
+				return matchingTypes.Single();
+			} else if (matchingTypes.Count > 1) {
+				throw new ArgumentException("There are more than 1 types that correspond to the chess piece name " + name);
+			}
+
+			return null;
 		}
 	}
 
