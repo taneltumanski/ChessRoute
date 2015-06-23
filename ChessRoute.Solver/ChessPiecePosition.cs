@@ -77,26 +77,35 @@ namespace ChessRoute.Solver
 		private static int CharactersToRow(string characters)
 		{
 			int sum = 0;
+			int power = 1;
 
 			for (int i = 0; i < characters.Length; i++) {
 				var c = characters[i];
 
-				var characterIndex = char.ToUpperInvariant(c) - 'A';
+				var charValue = char.ToUpperInvariant(c) - 'A' + 1;
 
-				sum += (i + 1) * characterIndex;
+				sum += power * charValue;
+				power *= 26;
 			}
 
-			return sum;
+			return sum - 1;
 		}
 
 		private static string RowToCharacters(int row)
 		{
-			var value = row;
+			var value = row + 1;
 
 			var sb = new StringBuilder();
 
-			//TODO CORRECT METHOD
-			sb.Append((char)('A' + row));
+			while (value > 0) {
+				var charIndex = value % 26;
+				var character = (char)('A' + charIndex - 1);
+
+				sb.Append(character);
+
+				value -= charIndex;
+				value /= 26;
+			}
 
 			return sb.ToString();
 		}
