@@ -47,7 +47,12 @@ namespace ChessRoute.Solver.Solvers
 					if (this.FindAllPossiblePaths) {
 						var allPathsFinder = new RecursivePathFinder();
 
-						var foundPaths =  allPathsFinder.GetMinimalMovementPaths(piece, endPosition, board, ImmutableList<ChessPiecePosition>.Empty, solutionPath.Count());
+						var foundPaths =  allPathsFinder.GetMinimalMovementPaths(
+																	piece, 
+																	endPosition, 
+																	board, 
+																	ImmutableList<ChessPiecePosition>.Empty,
+																	solutionPath.Count());
 
 						foreach (var path in foundPaths) {
 							solutions.Add(path);

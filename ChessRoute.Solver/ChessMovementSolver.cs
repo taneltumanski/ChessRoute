@@ -24,7 +24,11 @@ namespace ChessRoute.Solver
 
 		public ChessSolverResult Solve(ChessMovementSolverParameters parameters)
 		{
-			return Solve(new ChessBoard(parameters.BoardWidth, parameters.BoardHeight, parameters.TakenPositions), parameters.StartPosition, parameters.EndPosition, parameters.ChessPiece);
+			return Solve(
+						new ChessBoard(parameters.BoardWidth, parameters.BoardHeight, parameters.TakenPositions),
+						parameters.StartPosition, 
+						parameters.EndPosition, 
+						parameters.ChessPiece);
 		}
 
 		public ChessSolverResult Solve(ChessBoard board, ChessPiecePosition startPosition, ChessPiecePosition endPosition, ChessPiece chessPiece)
