@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessRoute", "ChessRoute\ChessRoute.csproj", "{F614B311-2DF9-4D5D-9054-18BB80DBABB1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessRoute.Solver", "ChessRoute.Solver\ChessRoute.Solver.csproj", "{938E11DE-E776-4530-85C4-08A9A0C00CE5}"
-EndProject
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED537F6A-4CAD-4792-B439-A7739187E5AE}"
 	ProjectSection(SolutionItems) = preProject
 		CustomInput.json = CustomInput.json
@@ -17,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{640721
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessRoute", "ChessRoute\ChessRoute.csproj", "{F614B311-2DF9-4D5D-9054-18BB80DBABB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessRoute.Solver", "ChessRoute.Solver\ChessRoute.Solver.csproj", "{938E11DE-E776-4530-85C4-08A9A0C00CE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessRoute.Web", "ChessRoute.Web\ChessRoute.Web.csproj", "{2CFB8E90-2666-4F8B-907A-5121188234C9}"
 EndProject
