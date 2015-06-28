@@ -17,20 +17,9 @@
     @Styles.Render("~/Content/chess")
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/chess")
 
     <script type="text/javascript">
-        var board = null;
-
         $(document).ready(function () {
-            var cfg = {
-                draggable: true,
-                dropOffBoard: 'snapback', // this is the default
-                position: 'start',
-                pieceTheme: 'Images/ChessPieces/{piece}.png'
-            };
-
-            board = new ChessBoard('chessBoard1', cfg);
         });
     </script>
 }
