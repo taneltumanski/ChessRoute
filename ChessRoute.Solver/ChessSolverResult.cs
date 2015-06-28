@@ -10,16 +10,16 @@ namespace ChessRoute.Solver
 {
 	public class ChessSolverResult
 	{
-		public IEnumerable<IList<ChessPiecePosition>> MinimalPaths { get; private set; }
-		public ChessPiecePosition StartPosition { get; private set; }
-		public ChessPiecePosition EndPosition { get; private set; }
+		public IEnumerable<IList<Position>> MinimalPaths { get; private set; }
+		public Position StartPosition { get; private set; }
+		public Position EndPosition { get; private set; }
 		public ChessPiece ChessPiece { get; private set; }
 		public ChessBoard ChessBoard { get; private set; }
 		public TimeSpan TimeTaken { get; private set; }
 
 		public bool HasSolution { get { return StartPosition == EndPosition || MinimalPaths.Any(); } }
 
-		public ChessSolverResult(ChessPiecePosition startPos, ChessPiecePosition endPos, ChessPiece piece, ChessBoard board, IEnumerable<IList<ChessPiecePosition>> minimalPaths, TimeSpan timeTaken)
+		public ChessSolverResult(Position startPos, Position endPos, ChessPiece piece, ChessBoard board, IEnumerable<IList<Position>> minimalPaths, TimeSpan timeTaken)
 		{
 			if (minimalPaths == null) {
 				throw new ArgumentNullException("minimalPaths");
@@ -38,7 +38,7 @@ namespace ChessRoute.Solver
 			this.ChessPiece = piece;
 			this.StartPosition = startPos;
 			this.EndPosition = endPos;
-			this.MinimalPaths = new ReadOnlyCollection<ReadOnlyCollection<ChessPiecePosition>>(minimalPaths.Select(path => new ReadOnlyCollection<ChessPiecePosition>(path)).ToList());
+			this.MinimalPaths = new ReadOnlyCollection<ReadOnlyCollection<Position>>(minimalPaths.Select(path => new ReadOnlyCollection<Position>(path)).ToList());
 		}
 	}
 }

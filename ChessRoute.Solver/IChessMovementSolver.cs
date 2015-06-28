@@ -9,6 +9,6 @@ namespace ChessRoute.Solver
 	public interface IChessMovementSolver
 	{
 		ChessSolverResult Solve(ChessMovementSolverParameters parameters);
-		ChessSolverResult Solve(ChessBoard board, ChessPiecePosition startPosition, ChessPiecePosition endPosition, ChessPiece piece);
+		ChessSolverResult Solve(ChessBoard board, Position startPosition, Position endPosition, ChessPiece piece);
 	}
 }

@@ -8,23 +8,23 @@ namespace ChessRoute.Solver.Pieces
 	public class King : ChessPiece
 	{
 		public King() : base() { }
-		public King(ChessPiecePosition pos) : base(pos) { }
+		public King(Position pos) : base(pos) { }
 
-		protected override ChessPiece CreateSubclassInstance(ChessPiecePosition newPosition)
+		protected override ChessPiece CreateSubclassInstance(Position newPosition)
 		{
 			return new King(newPosition);
 		}
 
-		protected override IEnumerable<ChessPiecePosition> GetMovePositions(ChessBoard board)
+		protected override IEnumerable<Position> GetMovePositions(ChessBoard board)
 		{
-			yield return new ChessPiecePosition(this.Position.Row - 1, this.Position.Column - 1);
-			yield return new ChessPiecePosition(this.Position.Row - 1, this.Position.Column);
-			yield return new ChessPiecePosition(this.Position.Row - 1, this.Position.Column + 1);
-			yield return new ChessPiecePosition(this.Position.Row, this.Position.Column + 1);
-			yield return new ChessPiecePosition(this.Position.Row + 1, this.Position.Column + 1);
-			yield return new ChessPiecePosition(this.Position.Row + 1, this.Position.Column);
-			yield return new ChessPiecePosition(this.Position.Row + 1, this.Position.Column - 1);
-			yield return new ChessPiecePosition(this.Position.Row, this.Position.Column - 1);
+			yield return new Position(this.Position.Row - 1, this.Position.Column - 1);
+			yield return new Position(this.Position.Row - 1, this.Position.Column);
+			yield return new Position(this.Position.Row - 1, this.Position.Column + 1);
+			yield return new Position(this.Position.Row, this.Position.Column + 1);
+			yield return new Position(this.Position.Row + 1, this.Position.Column + 1);
+			yield return new Position(this.Position.Row + 1, this.Position.Column);
+			yield return new Position(this.Position.Row + 1, this.Position.Column - 1);
+			yield return new Position(this.Position.Row, this.Position.Column - 1);
 		}
 	}
 }

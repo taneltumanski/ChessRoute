@@ -8,6 +8,6 @@ namespace ChessRoute.Solver
 {
 	public interface IMinimalPathFinder
 	{
-		IEnumerable<IList<ChessPiecePosition>> FindMinimalPath(ChessPiece piece, ChessPiecePosition endPosition, ChessBoard board);
+		IEnumerable<IList<Position>> FindMinimalPath(ChessPiece piece, Position endPosition, ChessBoard board);
 	}
 }

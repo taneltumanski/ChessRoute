@@ -6,18 +6,18 @@ using System.Text.RegularExpressions;
 
 namespace ChessRoute.Solver
 {
-	public struct ChessPiecePosition
+	public struct Position
 	{
 		public int Row { get; private set; }
 		public int Column { get; private set; }
 
-		public ChessPiecePosition(int row, int col) : this()
+		public Position(int row, int col) : this()
 		{
 			this.Row = row;
 			this.Column = col;
 		}
 
-		public double DistanceTo(ChessPiecePosition pos)
+		public double DistanceTo(Position pos)
 		{
 			var a = this.Row - pos.Row;
 			var b = this.Column - pos.Column;
@@ -27,8 +27,8 @@ namespace ChessRoute.Solver
 
 		public override bool Equals(object obj)
 		{
-			if (obj is ChessPiecePosition) {
-				var pos = (ChessPiecePosition)obj;
+			if (obj is Position) {
+				var pos = (Position)obj;
 
 				return pos.Row == this.Row && pos.Column == this.Column;
 			}
@@ -36,12 +36,12 @@ namespace ChessRoute.Solver
 			return false;
 		}
 
-		public static bool operator ==(ChessPiecePosition first, ChessPiecePosition second)
+		public static bool operator ==(Position first, Position second)
 		{
 			return first.Equals(second);
 		}
 
-		public static bool operator !=(ChessPiecePosition first, ChessPiecePosition second)
+		public static bool operator !=(Position first, Position second)
 		{
 			return !first.Equals(second);
 		}
@@ -56,7 +56,7 @@ namespace ChessRoute.Solver
 			return string.Format("{0}{1}", RowToCharacters(this.Row), this.Column + 1);
 		}
 
-		public static ChessPiecePosition FromString(string positionInput)
+		public static Position FromString(string positionInput)
 		{
 			// Check if the input string is in the form of A1, AA11, AZZASD112312 etc
 			if (!Regex.IsMatch(positionInput, @"[a-zA-Z]+\d+")) {
@@ -71,7 +71,7 @@ namespace ChessRoute.Solver
 			var row = CharactersToRow(characters);
 			var column = int.Parse(numbers) - 1;
 
-			return new ChessPiecePosition(row, column);
+			return new Position(row, column);
 		}
 
 		private static int CharactersToRow(string characters)
