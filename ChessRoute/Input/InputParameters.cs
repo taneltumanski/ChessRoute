@@ -17,10 +17,10 @@ namespace ChessRoute.Input
 
 		public ChessMovementSolverParameters ToSolverParameters()
 		{
-			var startPos = ChessPiecePosition.FromString(this.StartPosition);
-			var endPos = ChessPiecePosition.FromString(this.EndPosition);
+			var startPos = Position.FromString(this.StartPosition);
+			var endPos = Position.FromString(this.EndPosition);
 			var chessPiece = new ChessPieceFactory().CreateChessPiece(this.ChessPiece);
-			var takenPositions = this.TakenPositions.Select(posString => ChessPiecePosition.FromString(posString));
+			var takenPositions = this.TakenPositions.Select(posString => Position.FromString(posString));
 
 			return new ChessMovementSolverParameters(startPos, endPos, takenPositions, chessPiece, this.BoardWidth, this.BoardHeight);
 		}

@@ -9,14 +9,14 @@ namespace ChessRoute.Solver
 {
 	public class ChessMovementSolverParameters
 	{
-		public ChessPiecePosition StartPosition { get; private set; }
-		public ChessPiecePosition EndPosition { get; private set; }
+		public Position StartPosition { get; private set; }
+		public Position EndPosition { get; private set; }
 		public ChessPiece ChessPiece { get; private set; }
-		public IEnumerable<ChessPiecePosition> TakenPositions { get; private set; }
+		public IEnumerable<Position> TakenPositions { get; private set; }
 		public int BoardWidth { get; private set; }
 		public int BoardHeight { get; private set; }
 
-		public ChessMovementSolverParameters(ChessPiecePosition startPos, ChessPiecePosition endPos, IEnumerable<ChessPiecePosition> takenPositions, ChessPiece piece, int width, int height)
+		public ChessMovementSolverParameters(Position startPos, Position endPos, IEnumerable<Position> takenPositions, ChessPiece piece, int width, int height)
 		{
 			if (piece == null) {
 				throw new ArgumentNullException("piece");
@@ -39,7 +39,7 @@ namespace ChessRoute.Solver
 			this.ChessPiece = piece;
 			this.StartPosition = startPos;
 			this.EndPosition = endPos;
-			this.TakenPositions = new ReadOnlyCollection<ChessPiecePosition>(takenPositions.ToList());
+			this.TakenPositions = new ReadOnlyCollection<Position>(takenPositions.ToList());
 		}
 	}
 }

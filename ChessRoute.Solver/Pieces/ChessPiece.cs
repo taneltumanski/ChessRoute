@@ -7,16 +7,16 @@ namespace ChessRoute.Solver.Pieces
 {
 	public abstract class ChessPiece
 	{
-		private readonly ChessPiecePosition _position;
-		public ChessPiecePosition Position { get { return _position; } }
+		private readonly Position _position;
+		public Position Position { get { return _position; } }
 
-		public ChessPiece() : this(new ChessPiecePosition(0,0)) {}
-		public ChessPiece(ChessPiecePosition position)
+		public ChessPiece() : this(new Position(0,0)) {}
+		public ChessPiece(Position position)
 		{
 			this._position = position;
 		}
 
-		public ChessPiece Move(ChessPiecePosition newPosition, ChessBoard board)
+		public ChessPiece Move(Position newPosition, ChessBoard board)
 		{
 			if (this.Position == newPosition) {
 				return this;
@@ -30,22 +30,22 @@ namespace ChessRoute.Solver.Pieces
 			return CreateSubclassInstance(newPosition);
 		}
 
-		public ChessPiece ForceMove(ChessPiecePosition newPosition)
+		public ChessPiece ForceMove(Position newPosition)
 		{
 			return CreateSubclassInstance(newPosition);
 		}
 
-		public IEnumerable<ChessPiecePosition> GetAvailableMovePositions(ChessBoard board)
+		public IEnumerable<Position> GetAvailableMovePositions(ChessBoard board)
 		{
 			return this.GetMovePositions(board).Where(pos => IsPositionAvailable(pos, board));
 		}
 
-		protected bool IsPositionAvailable(ChessPiecePosition pos, ChessBoard board)
+		protected bool IsPositionAvailable(Position pos, ChessBoard board)
 		{
 			return board.IsPositionOnBoard(pos) && board.IsFreePosition(pos);
 		}
 
-		protected abstract IEnumerable<ChessPiecePosition> GetMovePositions(ChessBoard board);
-		protected abstract ChessPiece CreateSubclassInstance(ChessPiecePosition newPosition);
+		protected abstract IEnumerable<Position> GetMovePositions(ChessBoard board);
+		protected abstract ChessPiece CreateSubclassInstance(Position newPosition);
 	}
 }

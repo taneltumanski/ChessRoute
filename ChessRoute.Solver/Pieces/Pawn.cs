@@ -8,16 +8,16 @@ namespace ChessRoute.Solver.Pieces
 	public class Pawn : ChessPiece
 	{
 		public Pawn() : base() { }
-		public Pawn(ChessPiecePosition pos) : base(pos) { }
+		public Pawn(Position pos) : base(pos) { }
 
-		protected override ChessPiece CreateSubclassInstance(ChessPiecePosition newPosition)
+		protected override ChessPiece CreateSubclassInstance(Position newPosition)
 		{
 			return new Pawn(newPosition);
 		}
 
-		protected override IEnumerable<ChessPiecePosition> GetMovePositions(ChessBoard board)
+		protected override IEnumerable<Position> GetMovePositions(ChessBoard board)
 		{
-			yield return new ChessPiecePosition(this.Position.Row - 1, this.Position.Column);
+			yield return new Position(this.Position.Row - 1, this.Position.Column);
 		}
 	}
 }

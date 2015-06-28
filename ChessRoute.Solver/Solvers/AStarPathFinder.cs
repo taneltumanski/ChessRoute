@@ -19,15 +19,15 @@ namespace ChessRoute.Solver.Solvers
 			this.FindAllPossiblePaths = findAllPossiblePaths;
 		}
 
-		public IEnumerable<IList<ChessPiecePosition>> FindMinimalPath(ChessPiece piece, ChessPiecePosition endPosition, ChessBoard board)
+		public IEnumerable<IList<Position>> FindMinimalPath(ChessPiece piece, Position endPosition, ChessBoard board)
 		{
 			var startPoint = piece.Position;
 
-			var cameFrom = new Dictionary<ChessPiecePosition, ChessPiecePosition>();
-			var gScore = new Dictionary<ChessPiecePosition, double>();
-			var fScore = new Dictionary<ChessPiecePosition, double>();
-			var openSet = new HashSet<ChessPiecePosition>() { startPoint };
-			var closedSet = new HashSet<ChessPiecePosition>();
+			var cameFrom = new Dictionary<Position, Position>();
+			var gScore = new Dictionary<Position, double>();
+			var fScore = new Dictionary<Position, double>();
+			var openSet = new HashSet<Position>() { startPoint };
+			var closedSet = new HashSet<Position>();
 
 			gScore.Add(startPoint, 0);
 			fScore.Add(startPoint, gScore[startPoint] + CostEstimate(startPoint, endPosition));
@@ -40,7 +40,7 @@ namespace ChessRoute.Solver.Solvers
 				if (current == endPosition) {
 					var solutionPath = CreatePath(endPosition, cameFrom);
 
-					var solutions = new List<IList<ChessPiecePosition>>();
+					var solutions = new List<IList<Position>>();
 
 					solutions.Add(solutionPath.ToList());
 
@@ -51,7 +51,7 @@ namespace ChessRoute.Solver.Solvers
 																	piece, 
 																	endPosition, 
 																	board, 
-																	ImmutableList<ChessPiecePosition>.Empty,
+																	ImmutableList<Position>.Empty,
 																	solutionPath.Count());
 
 						foreach (var path in foundPaths) {
@@ -84,12 +84,12 @@ namespace ChessRoute.Solver.Solvers
 				}
 			}
 
-			return new List<IList<ChessPiecePosition>>();
+			return new List<IList<Position>>();
 		}
 
-		private IEnumerable<ChessPiecePosition> CreatePath(ChessPiecePosition current, Dictionary<ChessPiecePosition, ChessPiecePosition> cameFrom)
+		private IEnumerable<Position> CreatePath(Position current, Dictionary<Position, Position> cameFrom)
 		{
-			var list = new List<ChessPiecePosition>();
+			var list = new List<Position>();
 
 			while (true) {
 				list.Add(current);
@@ -102,10 +102,10 @@ namespace ChessRoute.Solver.Solvers
 			}
 
 			// Reverse the list becase we traverse the step tree backwards
-			return new ReadOnlyCollection<ChessPiecePosition>(Enumerable.Reverse(list).ToList());
+			return new ReadOnlyCollection<Position>(Enumerable.Reverse(list).ToList());
 		}
 
-		private double CostEstimate(ChessPiecePosition a, ChessPiecePosition b)
+		private double CostEstimate(Position a, Position b)
 		{
 			return a.DistanceTo(b);
 		}

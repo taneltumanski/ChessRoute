@@ -9,7 +9,7 @@ namespace ChessRoute.Solver.Solvers
 {
 	public class RecursivePathFinder : IMinimalPathFinder
 	{
-		public IEnumerable<IList<ChessPiecePosition>> FindMinimalPath(ChessPiece piece, ChessPiecePosition endPos, ChessBoard board)
+		public IEnumerable<IList<Position>> FindMinimalPath(ChessPiece piece, Position endPos, ChessBoard board)
 		{
 			if (piece == null) {
 				throw new ArgumentNullException("piece");
@@ -19,19 +19,19 @@ namespace ChessRoute.Solver.Solvers
 				throw new ArgumentNullException("board");
 			}
 
-			return GetMinimalMovementPaths(piece, endPos, board, ImmutableList<ChessPiecePosition>.Empty, int.MaxValue);
+			return GetMinimalMovementPaths(piece, endPos, board, ImmutableList<Position>.Empty, int.MaxValue);
 		}
 
-		internal IEnumerable<IList<ChessPiecePosition>> GetMinimalMovementPaths(ChessPiece piece, ChessPiecePosition endPos, ChessBoard board, ImmutableList<ChessPiecePosition> currentSteps, int bestPathStepCount)
+		internal IEnumerable<IList<Position>> GetMinimalMovementPaths(ChessPiece piece, Position endPos, ChessBoard board, ImmutableList<Position> currentSteps, int bestPathStepCount)
 		{
 			// If we reached the end then return the steps we took to get here
 			if (piece.Position == endPos) {
-				return ImmutableList<IList<ChessPiecePosition>>.Empty.Add(currentSteps);
+				return ImmutableList<IList<Position>>.Empty.Add(currentSteps);
 			}
 
 			// If the current steps are above the best step count thus far, return
 			if (currentSteps.Count >= bestPathStepCount) {
-				return ImmutableList<IList<ChessPiecePosition>>.Empty;
+				return ImmutableList<IList<Position>>.Empty;
 			}
 
 			// Get the available step positions on the board and order them by distance
@@ -39,7 +39,7 @@ namespace ChessRoute.Solver.Solvers
 																.Where(pos => !currentSteps.Contains(pos))
 																.OrderBy(pos => pos.DistanceTo(endPos));
 
-			var resultList = ImmutableList<IList<ChessPiecePosition>>.Empty;
+			var resultList = ImmutableList<IList<Position>>.Empty;
 
 			// Iterate over every available step and add the results to the list
 			foreach (var availableStepPosition in availableStepPositions) {

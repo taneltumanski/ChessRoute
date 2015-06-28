@@ -20,11 +20,11 @@ namespace ChessRoute.Solver
 		public int Width { get { return _width; } }
 		public int Height { get { return _height; } }
 
-		private readonly ReadOnlyCollection<ChessPiecePosition> _takenPositions;
-		public IEnumerable<ChessPiecePosition> TakenPositions { get { return _takenPositions; } }
+		private readonly ReadOnlyCollection<Position> _takenPositions;
+		public IEnumerable<Position> TakenPositions { get { return _takenPositions; } }
 
-		public ChessBoard(IEnumerable<ChessPiecePosition> takenPositions) : this(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT, takenPositions) { }
-		public ChessBoard(int width, int height, IEnumerable<ChessPiecePosition> takenPositions)
+		public ChessBoard(IEnumerable<Position> takenPositions) : this(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT, takenPositions) { }
+		public ChessBoard(int width, int height, IEnumerable<Position> takenPositions)
 		{
 			if (width <= 0) {
 				throw new ArgumentException("Board width cannot be <= 0");
@@ -43,10 +43,10 @@ namespace ChessRoute.Solver
 			this._width = width;
 			this._height = height;
 			this._positionData = GetAvailablePositions(width, height, takenPositionsList);
-			this._takenPositions = new ReadOnlyCollection<ChessPiecePosition>(takenPositionsList);
+			this._takenPositions = new ReadOnlyCollection<Position>(takenPositionsList);
 		}
 
-		private bool[][] GetAvailablePositions(int width, int height, IEnumerable<ChessPiecePosition> takenPositions)
+		private bool[][] GetAvailablePositions(int width, int height, IEnumerable<Position> takenPositions)
 		{
 			var rowBuilder = new bool[height][];
 
@@ -69,7 +69,7 @@ namespace ChessRoute.Solver
 			return rowBuilder;
 		}
 
-		public bool IsFreePosition(ChessPiecePosition pos)
+		public bool IsFreePosition(Position pos)
 		{
 			if (!IsPositionOnBoard(pos)) {
 				throw new ArgumentException("New position is not on the board");
@@ -78,7 +78,7 @@ namespace ChessRoute.Solver
 			return _positionData[pos.Row][pos.Column];
 		}
 
-		public bool IsPositionOnBoard(ChessPiecePosition pos)
+		public bool IsPositionOnBoard(Position pos)
 		{
 			if (pos.Row < 0 || pos.Column < 0) {
 				return false;

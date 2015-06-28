@@ -31,7 +31,7 @@ namespace ChessRoute.Solver
 						parameters.ChessPiece);
 		}
 
-		public ChessSolverResult Solve(ChessBoard board, ChessPiecePosition startPosition, ChessPiecePosition endPosition, ChessPiece chessPiece)
+		public ChessSolverResult Solve(ChessBoard board, Position startPosition, Position endPosition, ChessPiece chessPiece)
 		{
 			var stopWatch = Stopwatch.StartNew();
 
@@ -61,7 +61,7 @@ namespace ChessRoute.Solver
 
 			if (startPosition == endPosition) {
 				// Create an empty path that indicates a no-step path
-				var emptyPath = new List<IList<ChessPiecePosition>>() { new List<ChessPiecePosition>() };
+				var emptyPath = new List<IList<Position>>() { new List<Position>() };
 
 				return new ChessSolverResult(startPosition, endPosition, chessPiece, board, emptyPath, stopWatch.Elapsed);
 			}
@@ -70,7 +70,7 @@ namespace ChessRoute.Solver
 
 			var minimalPaths = this.PathFinder.FindMinimalPath(chessPiece, endPosition, board);
 
-			minimalPaths = minimalPaths ?? new List<IList<ChessPiecePosition>>();
+			minimalPaths = minimalPaths ?? new List<IList<Position>>();
 
 			// Group the results by step count and order it, so the best paths are in the front
 			var bestResults = minimalPaths
@@ -79,12 +79,12 @@ namespace ChessRoute.Solver
 									.FirstOrDefault();
 
 			// If the result is not found then create
-			var returnResult = bestResults == null ? new List<IList<ChessPiecePosition>>() : bestResults.ToList();
+			var returnResult = bestResults == null ? new List<IList<Position>>() : bestResults.ToList();
 
 			// Remove the first position if it is the start position
 			returnResult = returnResult
 								.Select(path => path.Any() && path.First() == startPosition ? path.Skip(1).ToList() : path.ToList())
-								.Cast<IList<ChessPiecePosition>>()
+								.Cast<IList<Position>>()
 								.ToList();
 
 			stopWatch.Stop();
