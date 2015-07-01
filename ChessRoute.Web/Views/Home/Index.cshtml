@@ -1,25 +1,238 @@
 ﻿@model ChessRoute.Web.Models.ChessParameterModel
 
 <div>
-    <div id="chessBoard1" style="width: 400px"></div>
+    @using (Ajax.BeginForm("SolveRoute", "Chess", new AjaxOptions() { 
+                                                            HttpMethod = "Get", 
+                                                            OnSuccess = "SolveRouteSuccess", 
+                                                            OnFailure = "SolveRouteFail", 
+                                                            OnComplete = "SolveRouteComplete", 
+                                                            OnBegin = "SolveRouteBegin" }, new { id = "chessForm" })) {
+        <div class="row center-block">
+            <table id="chessTable" class="center-block col-lg-12"></table>
+        </div>
 
-    <div style="float:right">
-        @using (Ajax.BeginForm("SolveRoute", "Chess", new AjaxOptions() { HttpMethod = "Get" })) { 
-            @Html.EditorForModel()
-        }
-        
-    </div>
-    <img src="~/Images/ChessPieces/bB.png" />
+        <div class="row center-block">
+            <div class="col-lg-12 center-block">
+                @Html.EditorForModel()
+            </div>
+        </div>
 
+        <div class="row center-block">
+            <input id="chessSubmit" type="submit" class="btn btn-block btn-primary disabled" value="Calculate movement" />
+        </div>
+    }
 </div>
 
 @section scripts {
-    @Styles.Render("~/Content/chess")
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
+        var minBoardSquareSize = 10;
+        var maxBoardCellsSize = 20;
+
+        var chessBoardUpdateTimer = null;
+
+        var chessPiecePath = null;
+
         $(document).ready(function () {
+            $("#BoardWidth").on("change", updateView);
+            $("#BoardHeight").on("change", updateView);
+            $("#StartPosition").on("change", updateView);
+            $("#EndPosition").on("change", updateView);
+            $("#ChessPiece").on("change", updateView);
+            $("#TakenPositions").on("change", updateView);
+
+            window.onresize = function () {
+                clearTimeout(chessBoardUpdateTimer);
+
+                chessBoardUpdateTimer = setTimeout(updateChessBoard, 200);
+            };
+
+            updateView();
         });
+
+        function SolveRouteBegin(data) {
+            $("#chessSubmit").addClass("disabled");
+        }
+
+        function SolveRouteSuccess(data) {
+            alert("sucess");
+        }
+
+        function SolveRouteFail(data) {
+            alert("fail");
+        }
+
+        function SolveRouteComplete() {
+            updateView();
+        }
+
+        function updateView() {
+            if ($("#chessForm").valid()) {
+                $("#chessSubmit").removeClass("disabled");
+            } else {
+                $("#chessSubmit").addClass("disabled");
+            }
+
+            updateChessBoard();
+        }
+
+        function updateChessBoard() {
+            var form = $("#chessForm");
+
+            if (!form.valid()) {
+                return;
+            }
+
+            var table = $("#chessTable");
+
+            table.width('100%');
+
+            var tableWidth = parseInt($("#BoardWidth").val());
+            var tableHeight = parseInt($("#BoardHeight").val());
+
+            if (tableWidth > maxBoardCellsSize || tableHeight > maxBoardCellsSize) {
+                return;
+            }
+
+            var boardActualWidth = table.width();
+
+            var squareWidth = boardActualWidth / tableWidth;
+            var squareHeight = boardActualWidth / tableHeight;
+
+            if (squareWidth < minBoardSquareSize || squareHeight < minBoardSquareSize) {
+                return;
+            }
+
+            if (squareWidth < squareHeight) {
+                squareHeight = squareWidth;
+            } else if (squareHeight < squareWidth) {
+                squareWidth = squareHeight;
+            }
+
+            table.width(squareWidth * tableWidth);
+
+            table.html("");
+            random(1);
+
+            var startPosition = $("#StartPosition").val().trim().toUpperCase();
+            var endPosition = $("#EndPosition").val().trim().toUpperCase();
+            var takenPositions = $("#TakenPositions").val().trim().toUpperCase().split(",");
+
+            for (var row = 0; row < tableHeight; row++) {
+                var chessRow = $("<tr>").width(boardActualWidth);
+
+                for (var column = 0; column < tableWidth; column++) {
+                    var squareID = positionToID(row, column);
+
+                    var chessColumn = $("<td>").width(squareWidth).height(squareHeight);
+                    var square = $("<div>")
+                                        .addClass("chessSquare");
+
+                    if (squareID === startPosition) {
+                        var chessPieceImage = getChessPieceImage($("#ChessPiece").val());
+
+                        square.html(chessPieceImage);
+                    } else if (squareID === endPosition) {
+                        square.addClass("endSquare");
+                    } else {
+                        for (var i = 0; i < takenPositions.length; i++) {
+                            if (squareID === takenPositions[i].trim()) {
+                                var randVal = 1 + parseInt(random() * 6);
+                                var takenPosImage = getChessPieceImage(randVal, true);
+
+                                square.html(takenPosImage);
+                            }
+                        }
+                    }
+
+                    chessColumn.append(square);
+                    chessRow.append(chessColumn);
+                }
+
+                table.append(chessRow);
+            }
+        }
+
+        function positionToID(row, column) {
+            var value = row + 1;
+
+            var sb = "";
+
+            while (value > 0) {
+                var charIndex = value % 26;
+                var character = 'A'.charCodeAt(0) + charIndex - 1;
+
+                sb += String.fromCharCode(character);
+
+                value -= charIndex;
+                value /= 26;
+            }
+
+            return sb + (column + 1);
+        }
+
+        function IDToPosition(id) {
+            var sum = 0;
+            var power = 1;
+
+            id = id.toUpperCase();
+
+            for (var i = 0; i < id.length; i++) {
+                var c = id.charCodeAt(i);
+
+                var charValue = c - 'A'.charCodeAt(0) + 1;
+
+                sum += power * charValue;
+                power *= 26;
+            }
+
+            return sum - 1;
+        }
+
+        function getChessPieceImage(pieceID, whites) {
+            if (whites) {
+                if (pieceID == 1) { // King
+                    return "&#9812;";
+                } else if (pieceID == 2) { // Queen
+                    return "&#9813;";
+                } else if (pieceID == 3) { // Rook
+                    return "&#9814;";
+                } else if (pieceID == 4) { // Bishop
+                    return "&#9815;";
+                } else if (pieceID == 5) { // Knight
+                    return "&#9816;";
+                } else if (pieceID == 6) { // Pawn
+                    return "&#9817;";
+                }
+            } else {
+                if (pieceID == 1) { // King
+                    return "&#9818;";
+                } else if (pieceID == 2) { // Queen
+                    return "&#9819;";
+                } else if (pieceID == 3) { // Rook
+                    return "&#9820;";
+                } else if (pieceID == 4) { // Bishop
+                    return "&#9821;";
+                } else if (pieceID == 5) { // Knight
+                    return "&#9822;";
+                } else if (pieceID == 6) { // Pawn
+                    return "&#9823;";
+                }
+            }
+
+            return "";
+        }
+
+        var seed = 1;
+        function random(newSeed) {
+            if (typeof newSeed == "number") {
+                seed = newSeed;
+            }
+
+            var x = Math.sin(seed++) * 10000;
+            return x - Math.floor(x);
+        }
     </script>
 }

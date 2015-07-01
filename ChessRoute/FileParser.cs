@@ -1,5 +1,6 @@
 ﻿using ChessRoute.Input;
 using ChessRoute.Solver;
+using ChessRoute.Solver.Input;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,10 @@ namespace ChessRoute
 {
 	public class FileParser
 	{
-		private readonly ReadOnlyCollection<IInputParser> Parsers;
+		private readonly ReadOnlyCollection<IInputParser<string>> Parsers;
 
-		public FileParser() : this(new List<IInputParser>() { new OriginalInputParser(), new JSONInputParser() }) { }
-		public FileParser(IEnumerable<IInputParser> parsers)
+		public FileParser() : this(new List<IInputParser<string>>() { new OriginalInputParser(), new JSONInputParser() }) { }
+		public FileParser(IEnumerable<IInputParser<string>> parsers)
 		{
 			if (parsers == null) {
 				throw new ArgumentNullException("parsers");
@@ -27,7 +28,7 @@ namespace ChessRoute
 				throw new ArgumentException("No parsers defined");
 			}
 
-			this.Parsers = new ReadOnlyCollection<IInputParser>(parserList);
+			this.Parsers = new ReadOnlyCollection<IInputParser<string>>(parserList);
 		}
 
 		public InputParameters Parse(string filePath)

@@ -50,6 +50,8 @@
     <Compile Include="ChessBoard.cs" />
     <Compile Include="ChessMovementSolver.cs" />
     <Compile Include="ChessPieceFactory.cs" />
+    <Compile Include="Input\IInputParser.cs" />
+    <Compile Include="Input\InputParameters.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="ChessSolverResult.cs" />
     <Compile Include="ChessMovementSolverParameters.cs" />

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ChessRoute.Input
+namespace ChessRoute.Solver.Input
 {
 	public class InputParameters
 	{
