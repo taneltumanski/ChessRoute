@@ -1,6 +1,7 @@
 ﻿using ChessRoute.Input;
 using ChessRoute.Output;
 using ChessRoute.Solver;
+using ChessRoute.Solver.Input;
 using ChessRoute.Solver.Solvers;
 using Newtonsoft.Json;
 using System;
@@ -28,7 +29,7 @@ namespace ChessRoute
 			var inputFile = args[0];
 			var outputFile = args[1];
 
-			var parser = new FileParser(new List<IInputParser>() { new OriginalInputParser(), new JSONInputParser() });
+			var parser = new FileParser(new List<IInputParser<string>>() { new OriginalInputParser(), new JSONInputParser() });
 
 			var inputParameters = parser.Parse(inputFile);
 			var chessSolverParameters = inputParameters.ToSolverParameters();
