@@ -151,7 +151,7 @@
             var endPosition = $("#EndPosition").val().trim().toUpperCase();
             var takenPositions = $("#TakenPositions").val().trim().toUpperCase().split(",");
 
-            for (var row = tableHeight; row >= 0; row--) {
+            for (var row = tableHeight - 1; row >= 0; row--) {
                 var chessRow = $("<tr>");
 
                 for (var column = 0; column < tableWidth; column++) {
