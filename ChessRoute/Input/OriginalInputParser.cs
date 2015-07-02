@@ -1,4 +1,5 @@
 ﻿using ChessRoute.Solver;
+using ChessRoute.Solver.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace ChessRoute.Input
 {
-	public class OriginalInputParser : IInputParser
+	public class OriginalInputParser : IInputParser<string>
 	{
 		public InputParameters Parse(string data)
 		{

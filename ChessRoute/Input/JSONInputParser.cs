@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ChessRoute.Solver.Input;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace ChessRoute.Input
 {
-	public class JSONInputParser : IInputParser
+	public class JSONInputParser : IInputParser<string>
 	{
 		private readonly JsonSerializerSettings Settings;
 

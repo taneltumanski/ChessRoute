@@ -1,0 +1,279 @@
+﻿@model ChessRoute.Web.Models.ChessParameterModel
+
+<div>
+    @using (Ajax.BeginForm("SolveRoute", "Chess", null, new AjaxOptions() { 
+                                                            HttpMethod = "Get", 
+                                                            OnSuccess = "SolveRouteSuccess", 
+                                                            OnFailure = "SolveRouteFail", 
+                                                            OnComplete = "SolveRouteComplete", 
+                                                            OnBegin = "SolveRouteBegin" }, new { id = "chessForm" })) {
+        <div class="row">
+            <table id="chessTable" class="col-lg-8"></table>
+
+            <div class="col-lg-4">
+                @Html.EditorForModel()
+
+                <input id="chessSubmit" type="submit" class="btn btn-block btn-primary disabled" value="Calculate movement" />
+
+                <span id="chessResultMessage" class="text-danger"></span>
+            </div>
+        </div> 
+    }
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        var minBoardSquareSize = 10;
+        var maxBoardSquareSize = 80;
+        var maxBoardCellsSize = 20;
+
+        var chessBoardUpdateTimer = null;
+
+        var chessHasPath = null;
+        var chessPiecePath = null;
+
+        $(document).ready(function () {
+            $("#BoardWidth").on("change", updateParameters);
+            $("#BoardHeight").on("change", updateParameters);
+            $("#StartPosition").on("change", updateParameters);
+            $("#EndPosition").on("change", updateParameters);
+            $("#ChessPiece").on("change", updateParameters);
+            $("#TakenPositions").on("change", updateParameters);
+
+            window.onresize = function () {
+                clearTimeout(chessBoardUpdateTimer);
+
+                chessBoardUpdateTimer = setTimeout(updateChessBoard, 200);
+            };
+
+            updateParameters();
+        });
+
+        function SolveRouteBegin(data) {
+            $("#chessSubmit").addClass("disabled");
+        }
+
+        function SolveRouteSuccess(data) {
+            chessHasPath = data.HasPath;
+            chessPiecePath = data.Path;
+
+            updateView();
+        }
+
+        function SolveRouteFail(data) {
+            alert("fail");
+        }
+
+        function SolveRouteComplete() {
+            updateView();
+        }
+
+        function updateParameters() {
+            chessHasPath = null;
+            chessPiecePath = null;
+
+            updateView();
+
+            if ($("#chessForm").valid()) {
+                $("#chessForm").submit();
+            }
+        }
+
+        function updateView() {
+            $("#chessResultMessage").html("");
+
+            if ($("#chessForm").valid()) {
+                $("#chessSubmit").removeClass("disabled");
+            } else {
+                $("#chessSubmit").addClass("disabled");
+            }
+
+            if (chessHasPath !== null && chessHasPath === false) {
+                $("#chessResultMessage").show().text("There is no path from " + $("#StartPosition").val() + " to " + $("#EndPosition").val());
+            }
+
+            updateChessBoard();
+        }
+
+        function updateChessBoard() {
+            var form = $("#chessForm");
+
+            if (!form.valid()) {
+                return;
+            }
+
+            var table = $("#chessTable");
+
+            table.width('100%');
+
+            var tableWidth = parseInt($("#BoardWidth").val());
+            var tableHeight = parseInt($("#BoardHeight").val());
+
+            if (tableWidth > maxBoardCellsSize || tableHeight > maxBoardCellsSize) {
+                return;
+            }
+
+            var boardActualWidth = table.width();
+
+            var squareWidth = boardActualWidth / tableWidth;
+            var squareHeight = boardActualWidth / tableHeight;
+
+            if (squareWidth < minBoardSquareSize || squareHeight < minBoardSquareSize) {
+                return;
+            }
+
+            if (squareWidth < squareHeight) {
+                squareHeight = squareWidth;
+            } else if (squareHeight < squareWidth) {
+                squareWidth = squareHeight;
+            }
+
+            if (squareWidth > maxBoardSquareSize) {
+                squareWidth = maxBoardSquareSize;
+            }
+
+            if (squareHeight > maxBoardSquareSize) {
+                squareHeight = maxBoardSquareSize;
+            }
+
+            table.width(squareWidth * tableWidth);
+
+            table.html("");
+
+            var startPosition = $("#StartPosition").val().trim().toUpperCase();
+            var endPosition = $("#EndPosition").val().trim().toUpperCase();
+            var takenPositions = $("#TakenPositions").val().trim().toUpperCase().split(",");
+
+            for (var row = 0; row < tableHeight; row++) {
+                var chessRow = $("<tr>");
+
+                for (var column = 0; column < tableWidth; column++) {
+                    var squareID = positionToID(column, row);
+
+                    var chessColumn = $("<td>").width(squareWidth).height(squareHeight);
+                    var square = $("<div>")
+                                        .addClass("chessSquare")
+                    ;
+
+                    if (squareID === startPosition) {
+                        var chessPieceImage = getChessPieceImage($("#ChessPiece").val());
+
+                        square.html(chessPieceImage);
+                    } else if (squareID === endPosition) {
+                        square.addClass("endSquare");
+
+                        if (chessPiecePath !== null && chessHasPath !== null && chessHasPath === true) {
+                            square.text(chessPiecePath.length);
+                        }
+                    } else {
+                        if (chessPiecePath !== null && chessHasPath !== null && chessHasPath === true) {
+                            for (var i = 0; i < chessPiecePath.length; i++) {
+                                if (squareID === chessPiecePath[i].toUpperCase().trim()) {
+                                    square.addClass("chessPathSquare");
+                                    square.text(i + 1);
+                                }
+                            }
+                        }
+
+                        for (var i = 0; i < takenPositions.length; i++) {
+                            if (squareID === takenPositions[i].toUpperCase().trim()) {
+                                var randVal = 1 + parseInt(random(i + 1) * 6);
+                                var takenPosImage = getChessPieceImage(randVal, true);
+
+                                square.html(takenPosImage);
+                            }
+                        }
+                    }
+
+                    chessColumn.append(square);
+                    chessRow.append(chessColumn);
+                }
+
+                table.append(chessRow);
+            }
+        }
+
+        function positionToID(row, column) {
+            var value = row + 1;
+
+            var sb = "";
+
+            while (value > 0) {
+                var charIndex = value % 26;
+                var character = 'A'.charCodeAt(0) + charIndex - 1;
+
+                sb += String.fromCharCode(character);
+
+                value -= charIndex;
+                value /= 26;
+            }
+
+            return sb + (column + 1);
+        }
+
+        function IDToPosition(id) {
+            var sum = 0;
+            var power = 1;
+
+            id = id.toUpperCase();
+
+            for (var i = 0; i < id.length; i++) {
+                var c = id.charCodeAt(i);
+
+                var charValue = c - 'A'.charCodeAt(0) + 1;
+
+                sum += power * charValue;
+                power *= 26;
+            }
+
+            return sum - 1;
+        }
+
+        function getChessPieceImage(pieceID, whites) {
+            if (whites) {
+                if (pieceID == 1) { // King
+                    return "&#9812;";
+                } else if (pieceID == 2) { // Queen
+                    return "&#9813;";
+                } else if (pieceID == 3) { // Rook
+                    return "&#9814;";
+                } else if (pieceID == 4) { // Bishop
+                    return "&#9815;";
+                } else if (pieceID == 5) { // Knight
+                    return "&#9816;";
+                } else if (pieceID == 6) { // Pawn
+                    return "&#9817;";
+                }
+            } else {
+                if (pieceID == 1) { // King
+                    return "&#9818;";
+                } else if (pieceID == 2) { // Queen
+                    return "&#9819;";
+                } else if (pieceID == 3) { // Rook
+                    return "&#9820;";
+                } else if (pieceID == 4) { // Bishop
+                    return "&#9821;";
+                } else if (pieceID == 5) { // Knight
+                    return "&#9822;";
+                } else if (pieceID == 6) { // Pawn
+                    return "&#9823;";
+                }
+            }
+
+            return "";
+        }
+
+        var seed = 1;
+        function random(newSeed) {
+            if (typeof newSeed == "number") {
+                seed = newSeed;
+            }
+
+            var x = Math.sin(seed++) * 10000;
+            return x - Math.floor(x);
+        }
+    </script>
+}

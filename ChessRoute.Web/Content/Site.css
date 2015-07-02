@@ -1,0 +1,51 @@
+﻿body {
+    margin-top: 40px;
+}
+
+#chessTable {
+    width: 100%;
+    border: solid 3px gray;
+    padding: 0px;
+    margin: 0px;
+    background: #fff;
+}
+
+    #chessTable tr:nth-child(odd) td:nth-child(even),
+    #chessTable tr:nth-child(even) td:nth-child(odd) {
+        background: #ccc;
+        background: -moz-linear-gradient(top, #ccc, #eee);
+        background: -webkit-gradient(linear,0 0, 0 100%, from(#ccc), to(#eee));
+        box-shadow: inset 0 0 10px rgba(0,0,0,.4);
+        -moz-box-shadow: inset 0 0 10px rgba(0,0,0,.4);
+        -webkit-box-shadow: inset 0 0 10px rgba(0,0,0,.4);
+    }
+
+    #chessTable .chessSquare {
+        width: 100%;
+        height: 100%;
+        color: #000;
+        font-family: 'Gentium Basic';
+        font-size: 3.5vw;
+        text-align: center;
+    }
+
+    #chessTable .endSquare {
+        background: rgba(0, 0, 255, 0.30);
+    }
+
+    #chessTable .chessPathSquare {
+        background: rgba(0, 255, 0, 0.50);
+    }
+
+#chessResultMessage {
+    font-size: 25px;
+}
+
+#chessSubmit {
+    font-size: x-large;
+    margin-top: 10px;
+}
+
+.form-control {
+    vertical-align: central;
+}
