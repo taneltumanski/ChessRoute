@@ -66,7 +66,7 @@ namespace ChessRoute.Solver
 				return new ChessSolverResult(startPosition, endPosition, chessPiece, board, emptyPath, stopWatch.Elapsed);
 			}
 
-			chessPiece = chessPiece.Move(startPosition, board);
+			chessPiece = chessPiece.ForceMove(startPosition);
 
 			var minimalPaths = this.PathFinder.FindMinimalPath(chessPiece, endPosition, board);
 
