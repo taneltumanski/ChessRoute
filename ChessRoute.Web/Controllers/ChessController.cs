@@ -25,7 +25,13 @@ namespace ChessRoute.Web.Controllers
 			var parameters = new ChessMovementSolverParameters(startPos, endPos, takenPositions, chessPiece, model.BoardWidth, model.BoardHeight);
 			var solver = new ChessMovementSolver(new AStarPathFinder());
 
-			var result = solver.Solve(parameters);
+			ChessSolverResult result = null;
+
+			try {
+				result = solver.Solve(parameters);
+			} catch (Exception e) {
+				return Json(new SolverResult() { Error = e.Message }, JsonRequestBehavior.AllowGet);
+			}
 
 			var firstMinPath = result.MinimalPaths.FirstOrDefault();
 
@@ -42,6 +48,8 @@ namespace ChessRoute.Web.Controllers
 		{
 			public bool HasPath { get; set; }
 			public IEnumerable<string> Path { get; set; }
+
+			public string Error { get; set; }
 		}
     }
 }

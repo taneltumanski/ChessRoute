@@ -34,6 +34,7 @@
 
         var chessHasPath = null;
         var chessPiecePath = null;
+        var chessError = null;
 
         $(document).ready(function () {
             $("#BoardWidth").on("change", updateParameters);
@@ -57,6 +58,7 @@
         }
 
         function SolveRouteSuccess(data) {
+            chessError = data.Error;
             chessHasPath = data.HasPath;
             chessPiecePath = data.Path;
 
@@ -64,7 +66,7 @@
         }
 
         function SolveRouteFail(data) {
-            alert("fail");
+            
         }
 
         function SolveRouteComplete() {
@@ -83,7 +85,7 @@
         }
 
         function updateView() {
-            $("#chessResultMessage").html("");
+            $("#chessResultMessage").hide().text("");
 
             if ($("#chessForm").valid()) {
                 $("#chessSubmit").removeClass("disabled");
@@ -91,7 +93,9 @@
                 $("#chessSubmit").addClass("disabled");
             }
 
-            if (chessHasPath !== null && chessHasPath === false) {
+            if (chessError !== null) {
+                $("#chessResultMessage").show().text(chessError);
+            } else if (chessHasPath !== null && chessHasPath === false) {
                 $("#chessResultMessage").show().text("There is no path from " + $("#StartPosition").val() + " to " + $("#EndPosition").val());
             }
 
@@ -147,7 +151,7 @@
             var endPosition = $("#EndPosition").val().trim().toUpperCase();
             var takenPositions = $("#TakenPositions").val().trim().toUpperCase().split(",");
 
-            for (var row = 0; row < tableHeight; row++) {
+            for (var row = tableHeight; row >= 0; row--) {
                 var chessRow = $("<tr>");
 
                 for (var column = 0; column < tableWidth; column++) {

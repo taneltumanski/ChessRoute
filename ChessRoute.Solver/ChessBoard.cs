@@ -12,7 +12,7 @@ namespace ChessRoute.Solver
 		private static readonly int DEFAULT_BOARD_WIDTH = 8;
 		private static readonly int DEFAULT_BOARD_HEIGHT = 8;
 
-		private readonly bool[][] _positionData;
+		private readonly bool[,] _positionData;
 
 		private readonly int _width;
 		private readonly int _height;
@@ -46,27 +46,23 @@ namespace ChessRoute.Solver
 			this._takenPositions = new ReadOnlyCollection<Position>(takenPositionsList);
 		}
 
-		private bool[][] GetAvailablePositions(int width, int height, IEnumerable<Position> takenPositions)
+		private bool[,] GetAvailablePositions(int width, int height, IEnumerable<Position> takenPositions)
 		{
-			var rowBuilder = new bool[height][];
+			var array = new bool[width, height];
 
-			for (int row = 0; row < rowBuilder.Length; row++) {
-				var columnBuilder = new bool[width];
-
-				for (int column = 0; column < columnBuilder.Length; column++) {
+			for (int row = 0; row < height; row++) {
+				for (int column = 0; column < width; column++) {
 					bool isFreePosition = true;
 
 					if (takenPositions.Any(pos => pos.Column == column && pos.Row == row)) {
 						isFreePosition = false;
 					}
 
-					columnBuilder[column] = isFreePosition;
+					array[column, row] = isFreePosition;
 				}
-
-				rowBuilder[row] = columnBuilder;
 			}
 
-			return rowBuilder;
+			return array;
 		}
 
 		public bool IsFreePosition(Position pos)
@@ -75,7 +71,7 @@ namespace ChessRoute.Solver
 				throw new ArgumentException("New position is not on the board");
 			}
 
-			return _positionData[pos.Column][pos.Row];
+			return _positionData[pos.Column, pos.Row];
 		}
 
 		public bool IsPositionOnBoard(Position pos)
@@ -84,7 +80,7 @@ namespace ChessRoute.Solver
 				return false;
 			}
 
-			return _positionData.Length > pos.Column && _positionData[pos.Column].Length > pos.Row;
+			return _positionData.GetLength(0) > pos.Column && _positionData.GetLength(1) > pos.Row;
 		}
     }
 }
