@@ -75,7 +75,7 @@ namespace ChessRoute.Solver
 				throw new ArgumentException("New position is not on the board");
 			}
 
-			return _positionData[pos.Row][pos.Column];
+			return _positionData[pos.Column][pos.Row];
 		}
 
 		public bool IsPositionOnBoard(Position pos)
@@ -84,7 +84,7 @@ namespace ChessRoute.Solver
 				return false;
 			}
 
-			return _positionData.Length > pos.Row && _positionData[pos.Row].Length > pos.Column;
+			return _positionData.Length > pos.Column && _positionData[pos.Column].Length > pos.Row;
 		}
     }
 }
