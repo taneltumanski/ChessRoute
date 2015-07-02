@@ -72,12 +72,12 @@ namespace ChessRoute.Solver.Solvers
 																					.OrderBy(pos => pos.DistanceTo(endPosition));
 
 				foreach (var neighbor in availableMovePositions) {
-					double tentativeGScore = gScore[current] + CostEstimate(endPosition, neighbor);
+					double tentativeGScore = gScore[current] + CostEstimate(neighbor, endPosition);
 
 					if (!openSet.Contains(neighbor) || tentativeGScore < gScore[neighbor]) {
 						cameFrom[neighbor] = current;
 						gScore[neighbor] = tentativeGScore;
-						fScore[neighbor] = gScore[neighbor] + CostEstimate(neighbor, endPosition);
+						fScore[neighbor] = gScore[neighbor] + tentativeGScore;
 
 						openSet.Add(neighbor);
 					}
