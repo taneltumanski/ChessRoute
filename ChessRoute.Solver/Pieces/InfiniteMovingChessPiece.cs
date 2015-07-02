@@ -12,7 +12,10 @@ namespace ChessRoute.Solver.Pieces
 
 		protected override IEnumerable<Position> GetMovePositions(ChessBoard board)
 		{
-			return GetMoveFunctions().SelectMany(func => PositionIterator(this.Position, func).TakeWhile(newPos => IsPositionAvailable(newPos, board)));
+			return GetMoveFunctions()
+							.SelectMany(func => PositionIterator(this.Position, func)
+																		.TakeWhile(newPos => IsPositionAvailable(newPos, board)))
+							.Distinct();
 		}
 
 		protected abstract IEnumerable<Func<Position, Position>> GetMoveFunctions();

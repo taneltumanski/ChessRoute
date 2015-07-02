@@ -13,7 +13,7 @@ namespace ChessRoute.Solver
 		{
 			switch (pieceOption) {
 				case ChessPieceOption.King: return new King();
-				case ChessPieceOption.Queen: return new Rook();
+				case ChessPieceOption.Queen: return new Queen();
 				case ChessPieceOption.Rook: return new Rook();
 				case ChessPieceOption.Bishop: return new Bishop();
 				case ChessPieceOption.Knight: return new Knight();
