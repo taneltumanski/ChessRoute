@@ -53,7 +53,7 @@ namespace ChessRoute.Solver
 
 		public override string ToString()
 		{
-			return string.Format("{0}{1}", RowToCharacters(this.Row), this.Column + 1);
+			return string.Format("{0}{1}", ColumnToCharacters(this.Column), this.Row + 1);
 		}
 
 		public static Position FromString(string positionInput)
@@ -68,13 +68,13 @@ namespace ChessRoute.Solver
 			var characters = new string(positionInput.TakeWhile(c => char.IsLetter(c)).ToArray());
 			var numbers = new string(positionInput.SkipWhile(c => char.IsLetter(c)).ToArray());
 
-			var row = CharactersToRow(characters);
-			var column = int.Parse(numbers) - 1;
+			var row = int.Parse(numbers) - 1;
+			var column = CharactersToColumn(characters);
 
 			return new Position(row, column);
 		}
 
-		private static int CharactersToRow(string characters)
+		private static int CharactersToColumn(string characters)
 		{
 			int sum = 0;
 			int power = 1;
@@ -91,9 +91,9 @@ namespace ChessRoute.Solver
 			return sum - 1;
 		}
 
-		private static string RowToCharacters(int row)
+		private static string ColumnToCharacters(int column)
 		{
-			var value = row + 1;
+			var value = column + 1;
 
 			var sb = new StringBuilder();
 
