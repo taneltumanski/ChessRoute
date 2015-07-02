@@ -117,6 +117,8 @@
             var tableHeight = parseInt($("#BoardHeight").val());
 
             if (tableWidth > maxBoardCellsSize || tableHeight > maxBoardCellsSize) {
+                $("#chessResultMessage").show().text("Maximum height or width is " + maxBoardCellsSize);
+
                 return;
             }
 
@@ -126,6 +128,8 @@
             var squareHeight = boardActualWidth / tableHeight;
 
             if (squareWidth < minBoardSquareSize || squareHeight < minBoardSquareSize) {
+                $("#chessResultMessage").show().text("Board square is too small for operation");
+
                 return;
             }
 
@@ -158,18 +162,26 @@
                     var squareID = positionToID(column, row);
 
                     var chessColumn = $("<td>").width(squareWidth).height(squareHeight);
-                    var square = $("<div>").addClass("chessSquare");
+                    var square = $("<div>")
+                                        .addClass("chessSquare")
+                                        .attr("data-id", squareID);
+
+                    square.click(updateSquareInsides);
 
                     if (squareID === startPosition) {
-                        var chessPieceImage = getChessPieceImage($("#ChessPiece").val());
+                        square.addClass("chessStartSquare");
+                        
+                        square.html(getChessPieceImage($("#ChessPiece").val()));
 
-                        square.html(chessPieceImage);
+                        square.draggable({ containment: "#chessTable"});
                     } else if (squareID === endPosition) {
-                        square.addClass("endSquare");
+                        square.addClass("chessEndSquare");
 
                         if (chessPiecePath !== null && chessHasPath !== null && chessHasPath === true) {
                             square.text(chessPiecePath.length);
                         }
+
+                        square.draggable({ containment: "#chessTable"});
                     } else {
                         if (chessPiecePath !== null && chessHasPath !== null && chessHasPath === true) {
                             for (var i = 0; i < chessPiecePath.length; i++) {
@@ -195,6 +207,72 @@
                 }
 
                 table.append(chessRow);
+            }
+        }
+
+        function updateSquareInsides() {
+            var currentID = $(this).attr("data-id").trim();
+
+            var startPosition = $("#StartPosition").val().trim().toUpperCase();
+            var endPosition = $("#EndPosition").val().trim().toUpperCase();
+            var takenPositions = $("#TakenPositions").val().trim().toUpperCase().split(",");
+
+            var removed = false;
+
+            if (startPosition === currentID) {
+                return;
+            } else if (endPosition === currentID) {
+                return;
+            } else {
+                for (var i = 0; i < takenPositions.length; i++) {
+                    if (takenPositions[i].trim() === currentID) {
+                        removeTakenSquare(currentID);
+
+                        removed = true;
+                    }
+                }
+            }
+
+            if (!removed) {
+                addTakenSquare(currentID);
+            }
+
+            updateParameters();
+        }
+
+        function removeTakenSquare(id) {
+            var takenPositions = $("#TakenPositions").val().trim().toUpperCase().split(",");
+
+            for (var i = 0; i < takenPositions.length; i++) {
+                takenPositions[i] = takenPositions[i].trim();
+            }
+
+            var index = takenPositions.indexOf(id);
+
+            if (index > -1) {
+                takenPositions.splice(index, 1);
+
+                var newTakenPositions = takenPositions.join(", ").trim();
+
+                $("#TakenPositions").val(newTakenPositions);
+            }
+        }
+
+        function addTakenSquare(id) {
+            var takenPositions = $("#TakenPositions").val().trim().toUpperCase().split(",");
+
+            for (var i = 0; i < takenPositions.length; i++) {
+                takenPositions[i] = takenPositions[i].trim();
+            }
+
+            var index = takenPositions.indexOf(id);
+
+            if (index === -1) {
+                takenPositions.push(id);
+
+                var newTakenPositions = takenPositions.join(", ").trim();
+
+                $("#TakenPositions").val(newTakenPositions);
             }
         }
 
