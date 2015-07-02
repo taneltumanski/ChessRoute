@@ -29,12 +29,16 @@
         text-align: center;
     }
 
-    #chessTable .endSquare {
-        background: rgba(0, 0, 255, 0.30);
+    #chessTable .chessStartSquare {
+        
+    }
+
+    #chessTable .chessEndSquare {
+        background: rgba(0, 255, 0, 0.50);
     }
 
     #chessTable .chessPathSquare {
-        background: rgba(0, 255, 0, 0.50);
+        background: rgba(0, 0, 255, 0.50);
     }
 
 #chessResultMessage {

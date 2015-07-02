@@ -183,6 +183,20 @@
 
                         square.draggable({ containment: "#chessTable"});
                     } else {
+                        square.droppable({
+                            drop: function (event, ui) {
+                                if ($(ui.draggable).hasClass("chessStartSquare")) {
+                                    $("#StartPosition").val($(this).attr("data-id"));
+                                } else if ($(ui.draggable).hasClass("chessEndSquare")) {
+                                    $("#EndPosition").val($(this).attr("data-id"));
+                                } else {
+                                    return;
+                                }
+
+                                updateParameters();
+                            }
+                        });
+
                         if (chessPiecePath !== null && chessHasPath !== null && chessHasPath === true) {
                             for (var i = 0; i < chessPiecePath.length; i++) {
                                 if (squareID === chessPiecePath[i].toUpperCase().trim()) {
