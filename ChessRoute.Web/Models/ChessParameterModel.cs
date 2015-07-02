@@ -15,7 +15,7 @@ namespace ChessRoute.Web.Models
 			ChessPiece = ChessPieceOption.Knight,
 			BoardHeight = 8,
 			BoardWidth = 8,
-			TakenPositions = new string[] { "B2", "D7", "G6" }
+			TakenPositionsList = new string[] { "B2", "D7", "G6" }
 		};
 
 		[Required]
@@ -33,10 +33,10 @@ namespace ChessRoute.Web.Models
 		[EnumDataType(typeof(ChessPieceOption))]
 		public ChessPieceOption ChessPiece { get; set; }
 
-		[Required(AllowEmptyStrings=true)]
+		[Required(AllowEmptyStrings = true)]
 		[Display(Name = "Taken positions")]
 		[DataType(DataType.Text)]
-		public IEnumerable<string> TakenPositions { get; set; }
+		public string TakenPositions { get; set; }
 
 		[Required]
 		[Display(Name = "Board width")]
@@ -47,5 +47,15 @@ namespace ChessRoute.Web.Models
 		[Display(Name = "Board height")]
 		[Range(1, int.MaxValue)]
 		public int BoardHeight { get; set; }
+
+		public IEnumerable<string> TakenPositionsList { 
+			get { 
+				return TakenPositions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()); 
+			}
+
+			set {
+				TakenPositions = string.Join(", ", value);
+			}
+		}
 	}
 }

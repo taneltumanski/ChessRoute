@@ -1,4 +1,5 @@
 ﻿@model ChessRoute.Web.Models.ChessParameterModel
+
 <div class="form-horizontal">
     <h4>Chess parameters</h4>
     <hr />
@@ -6,7 +7,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.BoardWidth, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-3">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.BoardWidth, new { htmlAttributes = new { @class = "form-control" } })
         </div>
         @Html.ValidationMessageFor(model => model.BoardWidth, "", new { @class = "text-danger" })
@@ -14,7 +15,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.BoardHeight, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-3">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.BoardHeight, new { htmlAttributes = new { @class = "form-control" } })
         </div>
         @Html.ValidationMessageFor(model => model.BoardHeight, "", new { @class = "text-danger" })
@@ -22,7 +23,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.StartPosition, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-3">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.StartPosition, new { htmlAttributes = new { @class = "form-control" } })
         </div>
         @Html.ValidationMessageFor(model => model.StartPosition, "", new { @class = "text-danger" })
@@ -30,7 +31,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.EndPosition, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-3">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.EndPosition, new { htmlAttributes = new { @class = "form-control" } })
         </div>
         @Html.ValidationMessageFor(model => model.EndPosition, "", new { @class = "text-danger" })
@@ -38,7 +39,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.TakenPositions, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-3">
+        <div class="col-md-6">
             @Html.EditorFor(model => model.TakenPositions, new { htmlAttributes = new { @class = "form-control" } })
         </div>
         @Html.ValidationMessageFor(model => model.TakenPositions, "", new { @class = "text-danger" })
@@ -46,7 +47,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.ChessPiece, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-3">
+        <div class="col-md-6">
             @Html.EnumDropDownListFor(model => model.ChessPiece, new { @class = "form-control" })
         </div>
         @Html.ValidationMessageFor(model => model.ChessPiece, "", new { @class = "text-danger" })

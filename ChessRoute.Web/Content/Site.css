@@ -21,16 +21,25 @@
     }
 
     #chessTable .chessSquare {
+        width: 100%;
+        height: 100%;
         color: #000;
-        display: block;
-        font-size: 6vw;
-        vertical-align: middle;
+        font-family: 'Gentium Basic';
+        font-size: 3.5vw;
         text-align: center;
     }
 
     #chessTable .endSquare {
-        background: rgba(255,0,0,0.5);
+        background: rgba(0, 0, 255, 0.30);
     }
+
+    #chessTable .chessPathSquare {
+        background: rgba(0, 255, 0, 0.50);
+    }
+
+#chessResultMessage {
+    font-size: 25px;
+}
 
 #chessSubmit {
     font-size: x-large;

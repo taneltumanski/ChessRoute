@@ -20,7 +20,7 @@ namespace ChessRoute.Web.Controllers
 			var startPos = Position.FromString(model.StartPosition);
 			var endPos = Position.FromString(model.EndPosition);
 			var chessPiece = new ChessPieceFactory().CreateChessPiece(model.ChessPiece);
-			var takenPositions = model.TakenPositions.Select(posString => Position.FromString(posString));
+			var takenPositions = model.TakenPositionsList.Select(posString => Position.FromString(posString));
 
 			var parameters = new ChessMovementSolverParameters(startPos, endPos, takenPositions, chessPiece, model.BoardWidth, model.BoardHeight);
 			var solver = new ChessMovementSolver(new AStarPathFinder());
@@ -28,7 +28,12 @@ namespace ChessRoute.Web.Controllers
 			var result = solver.Solve(parameters);
 
 			var firstMinPath = result.MinimalPaths.FirstOrDefault();
-			var jsonResult = new SolverResult() { HasPath = firstMinPath != null, Path = firstMinPath.Select(pos => pos.ToString()) };
+
+			var jsonResult = new SolverResult();
+
+			if (firstMinPath != null) {
+				jsonResult = new SolverResult() { HasPath = firstMinPath != null, Path = firstMinPath.Select(pos => pos.ToString()) };
+			}
 
 			return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
