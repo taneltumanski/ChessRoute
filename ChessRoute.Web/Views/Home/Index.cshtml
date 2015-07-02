@@ -31,18 +31,19 @@
         var maxBoardCellsSize = 20;
 
         var chessBoardUpdateTimer = null;
+        var globalUpdateTimer = null;
 
         var chessHasPath = null;
         var chessPiecePath = null;
         var chessError = null;
 
         $(document).ready(function () {
-            $("#BoardWidth").on("change", updateParameters);
-            $("#BoardHeight").on("change", updateParameters);
-            $("#StartPosition").on("change", updateParameters);
-            $("#EndPosition").on("change", updateParameters);
-            $("#ChessPiece").on("change", updateParameters);
-            $("#TakenPositions").on("change", updateParameters);
+            $("#BoardWidth").on("change", setUpdateTimeout);
+            $("#BoardHeight").on("change", setUpdateTimeout);
+            $("#StartPosition").on("change", setUpdateTimeout);
+            $("#EndPosition").on("change", setUpdateTimeout);
+            $("#ChessPiece").on("change", setUpdateTimeout);
+            $("#TakenPositions").on("change", setUpdateTimeout);
 
             window.onresize = function () {
                 clearTimeout(chessBoardUpdateTimer);
@@ -52,6 +53,14 @@
 
             updateParameters();
         });
+
+        function setUpdateTimeout() {
+            clearTimeout(globalUpdateTimer);
+
+            globalUpdateTimer = setTimeout(updateParameters, 500);
+
+            updateChessBoard();
+        }
 
         function SolveRouteBegin(data) {
             $("#chessSubmit").addClass("disabled");
@@ -193,7 +202,7 @@
                                     return;
                                 }
 
-                                updateParameters();
+                                setUpdateTimeout();
                             }
                         });
 
@@ -247,15 +256,35 @@
                 }
             }
 
-            if (!removed) {
+            if (removed) {
+                setUpdateTimeout();
+            } else {
                 addTakenSquare(currentID);
-            }
 
-            updateParameters();
+                var placedOnPath = false;
+
+                if (chessPiecePath !== null) {
+                    for (var i = 0; i < chessPiecePath.length; i++) {
+                        if (chessPiecePath[i].toUpperCase().trim() === currentID) {
+                            placedOnPath = true;
+
+                            break;
+                        }
+                    }
+                }
+
+                if (placedOnPath) {
+                    setUpdateTimeout();
+                } else {
+                    updateChessBoard();
+                } 
+            } 
         }
 
         function removeTakenSquare(id) {
             var takenPositions = $("#TakenPositions").val().trim().toUpperCase().split(",");
+
+            takenPositions = cleanArray(takenPositions);
 
             for (var i = 0; i < takenPositions.length; i++) {
                 takenPositions[i] = takenPositions[i].trim();
@@ -274,6 +303,8 @@
 
         function addTakenSquare(id) {
             var takenPositions = $("#TakenPositions").val().trim().toUpperCase().split(",");
+
+            takenPositions = cleanArray(takenPositions);
 
             for (var i = 0; i < takenPositions.length; i++) {
                 takenPositions[i] = takenPositions[i].trim();
@@ -324,6 +355,16 @@
             }
 
             return sum - 1;
+        }
+
+        function cleanArray(actual) {
+            var newArray = new Array();
+            for (var i = 0; i < actual.length; i++) {
+                if (actual[i]) {
+                    newArray.push(actual[i]);
+                }
+            }
+            return newArray;
         }
 
         function getChessPieceImage(pieceID, whites) {

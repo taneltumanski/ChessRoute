@@ -33,7 +33,6 @@ namespace ChessRoute.Web.Models
 		[EnumDataType(typeof(ChessPieceOption))]
 		public ChessPieceOption ChessPiece { get; set; }
 
-		[Required(AllowEmptyStrings = true)]
 		[Display(Name = "Taken positions")]
 		[DataType(DataType.Text)]
 		public string TakenPositions { get; set; }
@@ -50,7 +49,7 @@ namespace ChessRoute.Web.Models
 
 		public IEnumerable<string> TakenPositionsList { 
 			get { 
-				return TakenPositions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()); 
+				return TakenPositions == null ? new string[0] : TakenPositions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()); 
 			}
 
 			set {
