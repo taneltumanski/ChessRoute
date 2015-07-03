@@ -29,10 +29,8 @@ namespace ChessRoute.Solver.Solvers
 			var openSet = new HashSet<Position>() { startPoint };
 			var closedSet = new HashSet<Position>();
 
-			gScore.Add(startPoint, 0);
-			fScore.Add(startPoint, gScore[startPoint] + CostEstimate(startPoint, endPosition));
-
-			closedSet.Add(startPoint);
+			gScore[startPoint] = 0;
+			fScore[startPoint] = gScore[startPoint] + CostEstimate(startPoint, endPosition);
 
 			while (openSet.Any()) {
 				var current = openSet.MinBy(x => fScore[x]);
@@ -68,16 +66,15 @@ namespace ChessRoute.Solver.Solvers
 				var currentPositionPiece = piece.ForceMove(current);
 
 				var availableMovePositions = currentPositionPiece.GetAvailableMovePositions(board)
-																					.Where(pos => !closedSet.Contains(pos))
-																					.OrderBy(pos => pos.DistanceTo(endPosition));
+																					.Where(pos => !closedSet.Contains(pos));
 
 				foreach (var neighbor in availableMovePositions) {
-					double tentativeGScore = gScore[current] + CostEstimate(neighbor, endPosition);
+					double tentativeGScore = gScore[current] + current.DistanceTo(neighbor);
 
 					if (!openSet.Contains(neighbor) || tentativeGScore < gScore[neighbor]) {
 						cameFrom[neighbor] = current;
 						gScore[neighbor] = tentativeGScore;
-						fScore[neighbor] = gScore[neighbor] + tentativeGScore;
+						fScore[neighbor] = gScore[neighbor] + CostEstimate(neighbor, endPosition);
 
 						openSet.Add(neighbor);
 					}
