@@ -11,6 +11,8 @@ namespace ChessRoute.Solver.Solvers
 {
 	public class AStarPathFinder : IMinimalPathFinder
 	{
+		private static readonly double SQRT_2 = Math.Sqrt(2);
+
 		private readonly bool FindAllPossiblePaths;
 
 		public AStarPathFinder() : this(false) { }
@@ -33,7 +35,11 @@ namespace ChessRoute.Solver.Solvers
 			fScore[startPoint] = gScore[startPoint] + CostEstimate(startPoint, endPosition);
 
 			while (openSet.Any()) {
-				var current = openSet.MinBy(x => fScore[x]);
+				var current = openSet
+								.GroupBy(x => fScore[x])
+								.MinBy(x => x.Key)
+								//.OrderBy(x => SquareDistance(x, endPosition))
+								.First();
 
 				if (current == endPosition) {
 					var solutionPath = CreatePath(endPosition, cameFrom);
@@ -69,12 +75,12 @@ namespace ChessRoute.Solver.Solvers
 																					.Where(pos => !closedSet.Contains(pos));
 
 				foreach (var neighbor in availableMovePositions) {
-					double tentativeGScore = gScore[current] + SquareDistance(current, neighbor);
+					double tentativeGScore = gScore[current] + 1;
 
 					if (!openSet.Contains(neighbor) || tentativeGScore < gScore[neighbor]) {
 						cameFrom[neighbor] = current;
 						gScore[neighbor] = tentativeGScore;
-						fScore[neighbor] = gScore[neighbor] + CostEstimate(neighbor, endPosition);
+						fScore[neighbor] = gScore[neighbor] + 1;
 
 						openSet.Add(neighbor);
 					}
@@ -105,18 +111,20 @@ namespace ChessRoute.Solver.Solvers
 		private double CostEstimate(Position a, Position b)
 		{
 			return SquareDistance(a, b);
-		}
+        }
 
 		private double SquareDistance(Position a, Position b)
 		{
-			var xDist = Math.Abs(a.Column - b.Column);
-			var yDist = Math.Abs(a.Row - b.Row);
+			int dx = Math.Abs(b.Column - a.Column);
+			int dy = Math.Abs(b.Row - a.Row);
 
-			if (xDist < yDist) {
-				return xDist;
-			}
+			int min = Math.Min(dx, dy);
+			int max = Math.Max(dx, dy);
 
-			return yDist;
+			int diagonalSteps = min;
+			int straightSteps = max - min;
+
+			return SQRT_2 * diagonalSteps + straightSteps;
 		}
 	}
 }

@@ -30,9 +30,7 @@ namespace ChessRoute.Solver
 				throw new ArgumentException("Board height cannot be <= 0");
 			}
 
-			if (takenPositions == null) {
-				throw new ArgumentNullException("takenPositions");
-			}
+			takenPositions = takenPositions ?? new List<Position>();
 
 			this.BoardWidth = width;
 			this.BoardHeight = height;
