@@ -45,10 +45,10 @@ namespace ChessRoute.Solver.Solvers
 					if (this.FindAllPossiblePaths) {
 						var allPathsFinder = new RecursivePathFinder();
 
-						var foundPaths =  allPathsFinder.GetMinimalMovementPaths(
-																	piece, 
-																	endPosition, 
-																	board, 
+						var foundPaths = allPathsFinder.GetMinimalMovementPaths(
+																	piece,
+																	endPosition,
+																	board,
 																	ImmutableList<Position>.Empty,
 																	solutionPath.Count());
 
@@ -69,7 +69,7 @@ namespace ChessRoute.Solver.Solvers
 																					.Where(pos => !closedSet.Contains(pos));
 
 				foreach (var neighbor in availableMovePositions) {
-					double tentativeGScore = gScore[current] + current.DistanceTo(neighbor);
+					double tentativeGScore = gScore[current] + SquareDistance(current, neighbor);
 
 					if (!openSet.Contains(neighbor) || tentativeGScore < gScore[neighbor]) {
 						cameFrom[neighbor] = current;
@@ -104,7 +104,19 @@ namespace ChessRoute.Solver.Solvers
 
 		private double CostEstimate(Position a, Position b)
 		{
-			return a.DistanceTo(b);
+			return SquareDistance(a, b);
+		}
+
+		private double SquareDistance(Position a, Position b)
+		{
+			var xDist = Math.Abs(a.Column - b.Column);
+			var yDist = Math.Abs(a.Row - b.Row);
+
+			if (xDist < yDist) {
+				return xDist;
+			}
+
+			return yDist;
 		}
 	}
 }
