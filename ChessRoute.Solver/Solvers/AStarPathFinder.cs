@@ -11,8 +11,6 @@ namespace ChessRoute.Solver.Solvers
 {
 	public class AStarPathFinder : IMinimalPathFinder
 	{
-		private static readonly double SQRT_2 = Math.Sqrt(2);
-
 		private readonly bool FindAllPossiblePaths;
 
 		public AStarPathFinder() : this(false) { }
@@ -28,17 +26,19 @@ namespace ChessRoute.Solver.Solvers
 			var cameFrom = new Dictionary<Position, Position>();
 			var gScore = new Dictionary<Position, double>();
 			var fScore = new Dictionary<Position, double>();
+			var distScore = new Dictionary<Position, double>();
 			var openSet = new HashSet<Position>() { startPoint };
 			var closedSet = new HashSet<Position>();
 
 			gScore[startPoint] = 0;
-			fScore[startPoint] = gScore[startPoint] + CostEstimate(startPoint, endPosition);
+			fScore[startPoint] = gScore[startPoint] + 1;
+			distScore[startPoint] = 0;
 
 			while (openSet.Any()) {
 				var current = openSet
 								.GroupBy(x => fScore[x])
 								.MinBy(x => x.Key)
-								//.OrderBy(x => SquareDistance(x, endPosition))
+								.OrderBy(x => distScore[x])
 								.First();
 
 				if (current == endPosition) {
@@ -71,8 +71,7 @@ namespace ChessRoute.Solver.Solvers
 
 				var currentPositionPiece = piece.ForceMove(current);
 
-				var availableMovePositions = currentPositionPiece.GetAvailableMovePositions(board)
-																					.Where(pos => !closedSet.Contains(pos));
+				var availableMovePositions = currentPositionPiece.GetAvailableMovePositions(board).Where(pos => !closedSet.Contains(pos));
 
 				foreach (var neighbor in availableMovePositions) {
 					double tentativeGScore = gScore[current] + 1;
@@ -81,6 +80,7 @@ namespace ChessRoute.Solver.Solvers
 						cameFrom[neighbor] = current;
 						gScore[neighbor] = tentativeGScore;
 						fScore[neighbor] = gScore[neighbor] + 1;
+						distScore[neighbor] = distScore[current] + current.DistanceTo(neighbor);
 
 						openSet.Add(neighbor);
 					}
@@ -106,25 +106,6 @@ namespace ChessRoute.Solver.Solvers
 
 			// Reverse the list becase we traverse the step tree backwards
 			return new ReadOnlyCollection<Position>(Enumerable.Reverse(list).ToList());
-		}
-
-		private double CostEstimate(Position a, Position b)
-		{
-			return SquareDistance(a, b);
-        }
-
-		private double SquareDistance(Position a, Position b)
-		{
-			int dx = Math.Abs(b.Column - a.Column);
-			int dy = Math.Abs(b.Row - a.Row);
-
-			int min = Math.Min(dx, dy);
-			int max = Math.Max(dx, dy);
-
-			int diagonalSteps = min;
-			int straightSteps = max - min;
-
-			return SQRT_2 * diagonalSteps + straightSteps;
 		}
 	}
 }

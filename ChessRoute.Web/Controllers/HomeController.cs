@@ -30,7 +30,9 @@ namespace ChessRoute.Web.Controllers
 			var piece = ChessPieceOption.Knight;
 
 			if (chessPiece != null) {
-				Enum.TryParse(chessPiece, true, out piece);
+				if (!Enum.TryParse(chessPiece, true, out piece)) {
+					piece = ChessPieceOption.Knight;
+				}
 			}
 
 			var model = new ChessParameterModel() {
